@@ -1,6 +1,12 @@
 .pragma library
 
-var visibleItems = 0; // ToDO velice dočasné!
+var nRows = 0
+var nColumns = 0
+
+function isIndexValid() {
+    console.log("not implemented")
+    return true;
+}
 
 function updateVisibleModel(inModel, visibleModel) {
 
@@ -15,20 +21,15 @@ function updateVisibleModel(inModel, visibleModel) {
             }
         }
         if(inModel.get(nIterInModel).added && nIndexInVisibleModel == -1) { // add to visibleModel
-            //addToVisibleModel(inModel.get(nIterInModel), visibleModel)
-            visibleModel.set(visibleItems++, inModel.get(nIterInModel));
+            visibleModel.set(0, inModel.get(nIterInModel));
         }
-//        if(!inModel.get(nIterInModel).added && nIndexInVisibleModel != -1) {
-//            removeFromVisibleModel(nIndexInVisibleModel, visibleModel)
-//        }
     }
 }
 
-function createModel(inModel, visibleModel, columns, rows) {
+function createModel(inModel, visibleModel) {
 
     // visibleModel inicialization
-    //visibleItems = model
-    for(var nIndex = 0; nIndex < columns * rows; nIndex++) {
+    for(var nIndex = 0; nIndex < nColumns * nRows; nIndex++) {
         visibleModel.append({"name":"", "added":false});
     }
 
