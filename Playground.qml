@@ -21,10 +21,10 @@ Item {
 
     ListModel {
         id: model
-        ListElement {name: "Turnov"; added: true; origin: true}
-        ListElement {name: "Praha"; added: false; origin: false}
-        ListElement {name: "Liberec"; added: false; origin: false}
-        ListElement {name: "Jihlava"; added: false; origin: false}
+        ListElement {name: "Hradčanská"; added: true; origin: true}
+        ListElement {name: "Malostranská"; added: false; origin: false}
+        ListElement {name: "Královský letohrádek"; added: false; origin: false}
+        ListElement {name: "Bílá hora"; added: false; origin: false}
 
         onDataChanged: {
             console.log("city added")
@@ -33,8 +33,8 @@ Item {
     }
 
     GridView {
-        property int rows: 5
-        property int columns: 5
+        property int rows: 7
+        property int columns: 7
         property int newIndex: -1
         property int lastIndex: -1
         property bool dragging: false
@@ -65,8 +65,8 @@ Item {
             width: grid.cellWidth
             height: grid.cellHeight
             color: "transparent"
-            border.width: grid.dragging ? 1 : 0
-            border.color: mouseArea.enableIconOrder ? "gold" : "#50FFD700"
+            border.width: 1//grid.dragging ? 1 : 0
+            border.color: Scripts.isIndexValid(index) ? "gold" : "#50FFD700"//mouseArea.enableIconOrder ? "gold" : "#50FFD700"
 
             Rectangle {
                 id: draggedItem
@@ -99,6 +99,7 @@ Item {
                     text: name
                     color: "silver"
                     horizontalAlignment: Text.AlignLeft
+                    wrapMode: Text.WordWrap
                 }
 
                 MouseArea {
