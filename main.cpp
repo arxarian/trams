@@ -13,25 +13,31 @@ int main(int argc, char *argv[])
     DataModelManager oDataModel;
     oDataModel.SetDataType(DataObject::staticMetaObject);
 
-    QVariantMap map;
+    QFile oInputFile(":/zastavky.txt");
+    if(oInputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream oInStream(&oInputFile);
+        oInStream.setCodec("UTF-8");
+        QVariantMap map;
+        while(!oInStream.atEnd())
+        {
+            QStringList arrStrList = oInStream.readLine().split(",");
+            QString strArg;
 
-    map.insert("name", "Hradčanská");
-    map.insert("added", false);
-    map.insert("origin", false);
-    oDataModel.appendItem(map);
-    map.insert("name", "Malostranské náměstí");
-    map.insert("added", false);
-    map.insert("origin", false);
-    oDataModel.appendItem(map);
-    map.insert("name", "Náměstí míru");
-    map.insert("added", false);
-    map.insert("origin", false);
-    oDataModel.appendItem(map);
-    map.insert("name", "Vítězné náměstí");
-    map.insert("added", false);
-    map.insert("origin", false);
-    oDataModel.appendItem(map);
-    Q_ASSERT(oDataModel.GetData().count() == 4);
+            map.insert("name", arrStrList.at(0));
+
+            strArg = arrStrList.at(1);
+            map.insert("latitude", strArg.toDouble());
+            strArg = arrStrList.at(2);
+            map.insert("longitude", strArg.toDouble());
+
+            map.insert("added", false);
+            map.insert("origin", false);
+            oDataModel.appendItem(map);
+        }
+    }
+
+//    Q_ASSERT(oDataModel.GetData().count() == 4);
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("dataModel", &oDataModel);
