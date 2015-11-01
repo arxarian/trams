@@ -9,28 +9,22 @@ Item {
 
     onNewCardChanged: {
         // mark another card as added
-        for(var i = 0; i < model.count; i++) {
-            console.log(model.get(i).name, model.get(i).added)
-            if(!model.get(i).added) {
-                model.setProperty(i, "added", true)
-                console.log("added")
+        for(var i = 0; i < dataModel.data.length; i++) {
+            if(!dataModel.getItem(i).added) {
+                dataModel.setItem(i, {"added":true})
+                Scripts.updateVisibleModel(dataModel, visibleModel);
                 break;
             }
         }
     }
 
-    ListModel {
-        id: model
-        ListElement {name: "Hradčanská"; added: true; origin: true}
-        ListElement {name: "Malostranská"; added: false; origin: false}
-        ListElement {name: "Královský letohrádek"; added: false; origin: false}
-        ListElement {name: "Bílá hora"; added: false; origin: false}
-
-        onDataChanged: {
-            console.log("city added")
-            Scripts.updateVisibleModel(this, visibleModel);
-        }
-    }
+//    Connections {
+//        target: dataModel
+//        onDataModelChanged: {
+//            console.log("item added")
+//            Scripts.updateVisibleModel(dataModel, visibleModel);
+//        }
+//    }
 
     GridView {
         property int rows: 7
@@ -44,11 +38,11 @@ Item {
             Component.onCompleted: {
                 Scripts.nRows = grid.rows
                 Scripts.nColumns = grid.columns
-                Scripts.createModel(model, this);
+                Scripts.createModel(dataModel, this);
             }
             onDataChanged: {
                 //Scripts.countVisibleItems(visibleModel);
-                console.log("update visible model")
+                //console.log("update visible model")
             }
         }
 
