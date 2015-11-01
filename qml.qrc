@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>Playground.qml</file>
         <file>scripts.js</file>
+        <file>zastavky.txt</file>
     </qresource>
 </RCC>
