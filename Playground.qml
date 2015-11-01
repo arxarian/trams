@@ -62,7 +62,7 @@ Item {
             id: deleagateItem
             width: grid.cellWidth
             height: grid.cellHeight
-            color: "transparent"
+            color: location ? "transparent" : "#70ff0000"
             border.width: 1//grid.dragging ? 1 : 0
             border.color: Scripts.isIndexValid(index) ? "gold" : "#50FFD700"//mouseArea.enableIconOrder ? "gold" : "#50FFD700"
 
@@ -181,6 +181,10 @@ Item {
                         visibleModel.move(nMin, nMax, 1);
                         visibleModel.move(nMax - 1, nMin, 1);
                         lastIndex = newIndex;
+
+                        // check position
+                        Scripts.checkPosition(newIndex, visibleModel);
+
                     }
                 }
             }
