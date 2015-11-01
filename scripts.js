@@ -29,16 +29,10 @@ function updateVisibleModel(inModel, visibleModel) {
 
     for(var nIterInModel = 0; nIterInModel < inModel.data.length; nIterInModel++) {
 
-        var nIndexInVisibleModel = -1;
-
-        for(var nIterVisibleModel = 0; nIterVisibleModel < visibleModel.count; nIterVisibleModel++) {
-            if(inModel.getItem(nIterInModel).name === visibleModel.get(nIterVisibleModel).name) {
-                nIndexInVisibleModel = nIterVisibleModel;
-                break;
-            }
-        }
-        if(inModel.getItem(nIterInModel).added && nIndexInVisibleModel == -1) { // add to visibleModel
+        if(!inModel.getItem(nIterInModel).added) {
             visibleModel.set(0, inModel.getItem(nIterInModel));
+            visibleModel.setProperty(0, "added", true)
+            break;
         }
     }
 }
