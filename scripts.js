@@ -25,16 +25,10 @@ function isIndexValid(index) { // při umístění např. 12 je platný pouze 7,
     return false;
 }
 
-function updateVisibleModel(inModel, visibleModel) {
+function updateVisibleModel(index, inModel, visibleModel) {
 
-    for(var nIterInModel = 0; nIterInModel < inModel.data.length; nIterInModel++) {
-
-        if(!inModel.getItem(nIterInModel).added) {
-            visibleModel.set(0, inModel.getItem(nIterInModel));
-            visibleModel.setProperty(0, "added", true)
-            break;
-        }
-    }
+    visibleModel.set(0, inModel.getItem(index));
+    visibleModel.setProperty(0, "added", true)
 }
 
 function createModel(inModel, visibleModel) {
@@ -45,6 +39,8 @@ function createModel(inModel, visibleModel) {
     }
 
     var middleIndex = (visibleModel.count - 1) / 2;
-    inModel.setItem(0, {"origin":true, "added":true})
-    visibleModel.set(middleIndex, inModel.getItem(0));
+    var randomIndex = (Math.random() * inModel.data.length).toFixed(0);
+
+    inModel.setItem(randomIndex, {"origin":true, "added":true})
+    visibleModel.set(middleIndex, inModel.getItem(randomIndex));
 }

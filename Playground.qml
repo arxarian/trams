@@ -9,12 +9,16 @@ Item {
 
     onNewCardChanged: {
         // mark another card as added
-        for(var i = 0; i < dataModel.data.length; i++) {
-            if(!dataModel.getItem(i).added) {
-                dataModel.setItem(i, {"added":true})
-                Scripts.updateVisibleModel(dataModel, visibleModel);
+        // potenciálně nekonečná smyčka
+        while(true) {
+            var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
+            console.log(randomIndex)
+            if(!dataModel.getItem(randomIndex).added) {
+                dataModel.setItem(randomIndex, {"added":true})
+                Scripts.updateVisibleModel(randomIndex, dataModel, visibleModel);
                 break;
             }
+
         }
     }
 
@@ -181,6 +185,8 @@ Item {
                 }
             }
         }
+
+        // onMove recalculate correctness of stops
 
         move: Transition { // this transition controls the effected cells movement
             NumberAnimation { properties: "x,y"; easing.type: Easing.OutQuad }
