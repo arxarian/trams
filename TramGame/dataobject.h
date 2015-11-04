@@ -17,11 +17,11 @@ class DataObject : public QObject
     Q_PROPERTY(double latitude MEMBER m_fLatitude NOTIFY latitudeChanged)
     Q_PROPERTY(double longitude MEMBER m_fLongitude NOTIFY longitudeChanged)
     Q_PROPERTY(bool added MEMBER m_bAdded NOTIFY addedChanged)
-    Q_PROPERTY(bool origin MEMBER m_bOrigin NOTIFY originChanged)
+    Q_PROPERTY(bool origin MEMBER m_bOrigin NOTIFY originChanged)   // TODO: zbytečné, můžu přidat v runtime
 
     QString m_strName;
-    double m_fLatitude;      /// šířka
-    double m_fLongitude;     /// délka
+    double m_fLatitude;      /// šířka  //server
+    double m_fLongitude;     /// délka  // východ, TODO: zkontrolovat
     bool m_bAdded;
     bool m_bOrigin;
 

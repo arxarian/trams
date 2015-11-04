@@ -19,10 +19,13 @@ int main(int argc, char *argv[])
         QTextStream oInStream(&oInputFile);
         oInStream.setCodec("UTF-8");
         QVariantMap map;
+
         while(!oInStream.atEnd())
         {
             QStringList arrStrList = oInStream.readLine().split(",");
             QString strArg;
+
+            Q_ASSERT(arrStrList.count() == 4);
 
             map.insert("name", arrStrList.at(0));
 
@@ -37,7 +40,7 @@ int main(int argc, char *argv[])
         }
     }
 
-//    Q_ASSERT(oDataModel.GetData().count() == 4);
+    qDebug() << oDataModel.GetData().count();
 
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("dataModel", &oDataModel);

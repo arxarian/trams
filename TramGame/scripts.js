@@ -88,4 +88,10 @@ function createModel(inModel, visibleModel) {
     inModel.setItem(randomIndex, {"origin":true, "added":true})
     visibleModel.set(middleIndex, inModel.getItem(randomIndex));
     visibleModel.setProperty(middleIndex, "location", true)
+
+    // DEBUG
+    randomIndex = (Math.random() * inModel.data.length).toFixed(0);
+    inModel.setItem(randomIndex, {"added":true})
+    visibleModel.set(middleIndex - 1, inModel.getItem(randomIndex));
+    visibleModel.setProperty(middleIndex - 1, "location", true)
 }
