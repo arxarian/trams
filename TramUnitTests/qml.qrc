@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>tst_testCases.qml</file>
+        <file>../TramGame/scripts.js</file>
+    </qresource>
+</RCC>
