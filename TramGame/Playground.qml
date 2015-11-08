@@ -18,7 +18,6 @@ Item {
                 Scripts.updateVisibleModel(randomIndex, dataModel, visibleModel);
                 break;
             }
-
         }
     }
 
@@ -31,11 +30,12 @@ Item {
 //    }
 
     GridView {
-        property int rows: 7
-        property int columns: 7
+        property int rows: 9
+        property int columns: 9
         property int newIndex: -1
         property int lastIndex: -1
         property bool dragging: false
+        property string lastMove: ""
 
         ListModel {
             id: visibleModel
@@ -65,6 +65,13 @@ Item {
             color: location ? "transparent" : "#70ff0000"
             border.width: 1//grid.dragging ? 1 : 0
             border.color: Scripts.isIndexValid(index) ? "gold" : "#50FFD700"//mouseArea.enableIconOrder ? "gold" : "#50FFD700"
+
+            Text {
+                anchors.centerIn: parent
+                font.pixelSize: 20
+                color: "#404040"
+                text: index
+            }
 
             Rectangle {
                 id: draggedItem
@@ -170,29 +177,12 @@ Item {
             }
         }
 
-        onNewIndexChanged: {
-            if(lastIndex != newIndex) {
-                if(!visibleModel.get(newIndex).origin) {
-                    if(Scripts.isIndexValid(newIndex)) {
-                        var nFrom = lastIndex;
-                        var nTo = newIndex;
-                        var nMin = Math.min(nFrom, nTo);
-                        var nMax = Math.max(nFrom, nTo);
-                        visibleModel.move(nMin, nMax, 1);
-                        visibleModel.move(nMax - 1, nMin, 1);
-                        lastIndex = newIndex;
-
-                        // check position
-                        Scripts.checkPosition(newIndex, visibleModel);
-
-                    }
-                }
-            }
-        }
-
-        // onMove recalculate correctness of stops
+        onNewIndexChanged: lastMove = Scripts.moveItems(lastIndex, newIndex, visibleModel, lastMove)
 
         move: Transition { // this transition controls the effected cells movement
+            NumberAnimation { properties: "x,y"; easing.type: Easing.OutQuad }
+        }
+        displaced: Transition { // this transition controls the effected cells movement
             NumberAnimation { properties: "x,y"; easing.type: Easing.OutQuad }
         }
     }
