@@ -4,6 +4,27 @@ var nRows = 0
 var nColumns = 0
 var nMiddleIndex = -1
 
+var leftDir = []
+var rightDir = []
+var topDir = []
+var bottomDir = []
+
+function getDir(x, y) {
+    if(x > leftDir.x && x < leftDir.x + leftDir.width && y > leftDir.y && y < leftDir.y + leftDir.height) {
+        return {dir:"left", x:(x - leftDir.x), y:(y - leftDir.y)};
+    }
+    else if(x > rightDir.x && x < rightDir.x + rightDir.width && y > rightDir.y && y < rightDir.y + rightDir.height) {
+        return {dir:"right", x:(x - rightDir.x), y:(y - rightDir.y)};
+    }
+    else if(x > topDir.x && x < topDir.x + topDir.width && y > topDir.y && y < topDir.y + topDir.height) {
+        return {dir:"top", x:(x - topDir.x), y:(y - topDir.y)};
+    }
+    else if(x > bottomDir.x && x < bottomDir.x + bottomDir.width && y > bottomDir.y && y < bottomDir.y + bottomDir.height) {
+        return {dir:"bottom", x:(x - bottomDir.x), y:(y - bottomDir.y)};
+    }
+    return {dir:"none"};
+}
+
 function leftInvalidIndex() {
     if(nMiddleIndex == -1) {
         computeMiddleIndex()

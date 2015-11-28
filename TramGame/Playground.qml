@@ -3,9 +3,25 @@ import QtQml.Models 2.2
 import "qrc:/scripts.js" as Scripts
 
 Item {
-    property bool newCard: false // TODO: předělat na signals&slots
+    property alias timerActive: timer.running
 
-    id: root
+    property var draggedItem: playground
+    property bool newCard: false // TODO: předělat na signals&slots
+    property int rows: 9
+    property int columns: 9
+    property int cellHeight: height / rows
+    property int cellWidth: width / columns
+
+    property string lastDir: "none"
+    property int lastIndex: -1
+    property int newIndex: -1
+
+    id: playground
+
+    anchors.fill: parent
+
+//    onLastDirChanged: console.log("lastDir", lastDir)
+//    onLastIndexChanged: console.log("lastIndex", lastIndex)
 
     onNewCardChanged: {
         // mark another card as added
@@ -17,7 +33,7 @@ Item {
                 dataModel.setItem(randomIndex, {"added":true})
                 Scripts.updateVisibleModel(randomIndex, dataModel, visibleModel);
                 break;
-            }
+            } else {console.log("conflict detected")}
         }
     }
 
@@ -29,162 +45,268 @@ Item {
 //        }
 //    }
 
-    GridView {
-        property int rows: 9
-        property int columns: 9
-        property int newIndex: -1
-        property int lastIndex: -1
-        property bool dragging: false
-        property string lastMove: ""
-
-        ListModel {
-            id: visibleModel
-            Component.onCompleted: {
-                Scripts.nRows = grid.rows
-                Scripts.nColumns = grid.columns
-                Scripts.createModel(dataModel, this);
-            }
-            onDataChanged: {
-                //Scripts.countVisibleItems(visibleModel);
-                //console.log("update visible model")
-            }
+    ListModel {
+        id: topDeck
+        ListElement {
+            name: "top first"
         }
+        ListElement {
+            name: "top second"
+        }
+    }
 
-        id: grid
+    ListModel {
+        id: bottomDeck
+        ListElement {
+            name: "bottom first"
+        }
+        ListElement {
+            name: "bottom second"
+        }
+        ListElement {
+            name: "bottom thrid"
+        }
+    }
 
-        anchors.fill: parent
+    ListModel {
+        id: leftDeck
+        ListElement {
+            name: "left first"
+        }
+        ListElement {
+            name: "left second"
+        }
+    }
+
+    ListModel {
+        id: rightDeck
+        ListElement {
+            name: "right first"
+        }
+        ListElement {
+            name: "right second"
+        }
+    }
+
+    // TOP
+    ListView {
+        property int cells: (playground.rows - 1) / 2
+
+        id: top
+        anchors.bottom: middle.top
+        anchors.left: middle.left
+        height: cells * cellHeight
+        width: parent.width / playground.columns
+
+        verticalLayoutDirection: ListView.BottomToTop
         interactive: false
-        cellHeight: height / rows
-        cellWidth: width / columns
-        model: visibleModel
+        model: topDeck
+        delegate: TramCell {
+            borderColor: "green"
+        }
 
-        delegate: Rectangle {
-            id: deleagateItem
-            width: grid.cellWidth
-            height: grid.cellHeight
-            color: location ? "transparent" : "#70ff0000"
-            border.width: 1//grid.dragging ? 1 : 0
-            border.color: Scripts.isIndexValid(index) ? "gold" : "#50FFD700"//mouseArea.enableIconOrder ? "gold" : "#50FFD700"
+        // TODO: tohle to možná dost zalaguje
+        onXChanged: {Scripts.topDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("x changed")*/}
+        onYChanged: {Scripts.topDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("y changed")*/}
+        onWidthChanged: {Scripts.topDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("width changed")*/}
+        onHeightChanged: {Scripts.topDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("height changed")*/}
+    }
+    // MIDDLE
+    ListView {
+        property int cells: 1
 
-            Text {
-                anchors.centerIn: parent
-                font.pixelSize: 20
-                color: "#404040"
-                text: index
-            }
+        id: middle
+        anchors.centerIn: parent
+        width: parent.width / playground.columns
+        height: parent.height / playground.rows
 
-            Rectangle {
-                id: draggedItem
-                height: deleagateItem.height * 0.8
-                width: deleagateItem.width * 0.8
-                visible: added
-                x: (deleagateItem.width - draggedItem.width) / 2;
-                y: (deleagateItem.height - draggedItem.height) / 2;
-                color: Qt.rgba(Math.random() / 2, Math.random() / 2, Math.random() / 2)
-                border.width: 3
-                border.color: Qt.rgba(1 - Math.random() / 2, 1 - Math.random() / 2, 1 - Math.random() / 2)
-                radius: 10
-                states: [   // draggedItem states
-                    State {
-                        when: mouseArea.enableIconOrder
-                        ParentChange {
-                            target: draggedItem
-                            parent: root
-                        }
-                        PropertyChanges {
-                            target: draggedItem;
-                            border.width: 6
-                        }
-                    }
-                ]
+        interactive: false
+        model: cells
+        delegate: TramCell {
+            property string name: "middle"
+            movable: false
+            borderColor: "red"
 
-                Text {
-                    anchors.margins: 15
-                    anchors.fill: parent
-                    text: name
-                    color: "silver"
-                    horizontalAlignment: Text.AlignLeft
-                    wrapMode: Text.WordWrap
-                }
-
-                MouseArea {
-                    property bool enableIconOrder: false
-
-                    id: mouseArea
-                    anchors.fill: parent
-                    drag.target: undefined
-
-                    onPressAndHold: {
-                        if(!visibleModel.get(index).origin) {
-                            enableIconOrder = true; //TODO: vytvořit z toho stav?
-                            grid.dragging = true; //TODO: přesunout do stavu
-                            draggedItem.parent = root; //TODO: přesunout do stavu ?
-                        }
-                    }
-                    onReleased: {
-                        enableIconOrder = false;
-                        grid.dragging = false;
-                        // restore property binding
-                        draggedItem.x = Qt.binding(function() {return (deleagateItem.width - draggedItem.width) / 2});
-                        draggedItem.y = Qt.binding(function() {return (deleagateItem.height - draggedItem.height) / 2});
-                    }
-                    states: [   // mouseArea states
-                        State {
-                            when: mouseArea.enableIconOrder
-                            PropertyChanges {
-                                target: mouseArea
-                                drag.target: mouseArea.parent
-                            }
-                            PropertyChanges {   // run timer
-                                target: timer
-                                running: true
-                            }
-                            StateChangeScript {
-                                script: {
-                                    grid.lastIndex = index;
-                                    grid.newIndex = index;
-                                }
-                            }
-                        }
-                    ]
-                    Timer { // the calculation of button new position is triggered every timer.interval ms
-                        id: timer
-                        interval: 400
-                        repeat: true
-                        onTriggered: {  // calculate new index
-                            var mapped = draggedItem.mapToItem(grid, 0, 0);
-                            var newIndex = grid.indexAt(mapped.x, mapped.y)
-                            if(newIndex > -1) {
-                                grid.newIndex = newIndex;
-                            }
-                        }
-                    }
-                }
-
-                // behavior on x,y controls only selected button
-                Behavior on x {
-                    NumberAnimation {
-                        //duration: Scripts.animationLength
-                        easing.type: Easing.InOutCubic
-                    }
-                }
-                Behavior on y {
-                    NumberAnimation {
-                        //duration: Scripts.animationLength
-                        easing.type: Easing.InOutCubic
-                    }
-                }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: cardModel.insert(0, {name:"appened"})
             }
         }
+    }
+    // BOTTOM
+    ListView {
+        property int cells: (playground.rows - 1) / 2
 
-        onNewIndexChanged: lastMove = Scripts.moveItems(lastIndex, newIndex, visibleModel, lastMove)
+        id: bottom
+        anchors.top: middle.bottom
+        anchors.left: middle.left
+        height: cells * cellHeight
+        width: parent.width / playground.columns
 
-        move: Transition { // this transition controls the effected cells movement
-            NumberAnimation { properties: "x,y"; easing.type: Easing.OutQuad }
+        interactive: false
+        model: bottomDeck
+        delegate: TramCell {
+            borderColor: "green"
         }
-        displaced: Transition { // this transition controls the effected cells movement
-            NumberAnimation { properties: "x,y"; easing.type: Easing.OutQuad }
+
+        // TODO: tohle to možná dost zalaguje
+        onXChanged: {Scripts.bottomDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("x changed")*/}
+        onYChanged: {Scripts.bottomDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("y changed")*/}
+        onWidthChanged: {Scripts.bottomDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("width changed")*/}
+        onHeightChanged: {Scripts.bottomDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("height changed")*/}
+    }
+    // LEFT
+    ListView {
+        property int cells: (playground.columns - 1) / 2
+
+        id: left
+        anchors.top: middle.top
+        anchors.right: middle.left
+        height: parent.height/ playground.rows
+        width: cells * cellWidth
+
+        layoutDirection: Qt.RightToLeft
+        orientation: Qt.Horizontal
+        interactive: false
+        model: leftDeck
+        delegate: TramCell {
+//            text: name
+            borderColor: "maroon"
         }
+
+//        add: Transition {
+//            NumberAnimation { properties: "x,y"; from: -200; duration: 1000 }
+//        }
+//        addDisplaced: Transition {
+//            NumberAnimation { properties: "x,y"; duration: 1000 }
+//        }
+
+//        move: Transition {
+//            NumberAnimation { properties: "x,y"; duration: 1000 }
+//        }
+
+        // TODO: tohle to možná dost zalaguje
+        onXChanged: {Scripts.leftDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("x changed")*/}
+        onYChanged: {Scripts.leftDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("y changed")*/}
+        onWidthChanged: {Scripts.leftDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("width changed")*/}
+        onHeightChanged: {Scripts.leftDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("height changed")*/}
+
+    }
+    // RIGHT
+    ListView {
+        property int cells: (playground.columns - 1) / 2
+
+        id: right
+        anchors.top: middle.top
+        anchors.left: middle.right
+        height: parent.height / playground.rows
+        width: cells * cellWidth
+
+        orientation: Qt.Horizontal
+        interactive: false
+        model: rightDeck
+        delegate: TramCell {
+            borderColor: "maroon"
+        }
+
+        add: Transition {
+            NumberAnimation { properties: "x,y"; from: -200; duration: 1000 }
+        }
+        addDisplaced: Transition {
+            NumberAnimation { properties: "x,y"; duration: 1000 }
+        }
+
+        move: Transition {
+            NumberAnimation { properties: "x,y"; duration: 500 }
+        }
+
+        moveDisplaced: Transition {
+            NumberAnimation { properties: "x,y"; duration: 500 }
+        }
+
+        onXChanged: {Scripts.rightDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("x changed")*/}
+        onYChanged: {Scripts.rightDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("y changed")*/}
+        onWidthChanged: {Scripts.rightDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("width changed")*/}
+        onHeightChanged: {Scripts.rightDir = {x: this.x, y: this.y, width: this.width, height: this.height}/*; console.log("height changed")*/}
+    }
+
+    Timer { // the calculation of button new position is triggered every timer.interval ms
+
+        function move(inModel, dir) {
+            if(newIndex > -1) {
+                console.log("index", newIndex, "last", lastIndex)
+                if(lastIndex !== newIndex && lastIndex > -1) {
+                    console.log("move", lastIndex, "to", newIndex)
+                    inModel.move(lastIndex, newIndex, 1)
+                }
+                lastIndex = newIndex
+                lastDir = dir
+            }
+        }
+
+        function rightIndex(x, y) {
+            return right.indexAt(x + cellWidth / 2, y)
+        }
+
+        function leftIndex(x, y) {
+            return left.indexAt(x - left.width -  cellWidth / 2, y)
+        }
+
+        function topIndex(x, y) {
+            return top.indexAt(x, y - top.height - cellHeight / 2)
+        }
+
+        function bottomIndex(x, y) {
+            return bottom.indexAt(x, y + cellHeight / 2)
+        }
+
+        function calcIndex() {
+            var mapped = draggedItem.mapToItem(playground, 0, 0);
+            var dir = Scripts.getDir(mapped.x, mapped.y)
+//            var newIndex = -1
+//            console.log(dir.dir)
+
+            if(dir.dir === lastDir) {
+                if(dir.dir === "right") {
+                    newIndex = rightIndex(dir.x, dir.y);
+                    move(rightDeck, dir.dir);
+                }
+
+                else if(dir.dir === "left") {
+                    newIndex = leftIndex(dir.x, dir.y)
+                    move(leftDeck, dir.dir);
+                }
+                else if(dir.dir === "top") {
+                    newIndex = topIndex(dir.x, dir.y)
+                    move(topDeck, dir.dir);
+                }
+                else if(dir.dir === "bottom") {
+                    newIndex = bottomIndex(dir.x, dir.y)
+                    move(bottomDeck, dir.dir);
+                }
+            }
+            else if (dir.dir === "none"){  // different dir
+                console.log("none")
+            }
+            else {
+                lastDir = dir.dir
+                lastIndex = -1
+                console.log("else")
+            }
+        }
+
+        id: timer
+        interval: 250
+        repeat: true
+        onRunningChanged: {
+            if(running == true) {
+                calcIndex()
+//                lastIndex = -1
+//                lastDir = "none"
+//                console.log("\n")
+            }
+        }
+        onTriggered: calcIndex()
     }
 }
 

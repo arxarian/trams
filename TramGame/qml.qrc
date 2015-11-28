@@ -4,5 +4,6 @@
         <file>Playground.qml</file>
         <file>scripts.js</file>
         <file>zastavky.txt</file>
+        <file>TramCell.qml</file>
     </qresource>
 </RCC>
