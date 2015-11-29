@@ -5,5 +5,7 @@
         <file>scripts.js</file>
         <file>zastavky.txt</file>
         <file>TramCell.qml</file>
+        <file>InnerCell.qml</file>
+        <file>TramSpot.qml</file>
     </qresource>
 </RCC>

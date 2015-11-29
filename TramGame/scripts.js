@@ -9,19 +9,27 @@ var rightDir = []
 var topDir = []
 var bottomDir = []
 
+function canRemove(inModel) {
+    var count = 0;
+    for(var nIndex = 0; nIndex < inModel.count; nIndex++) {
+        if(inModel.get(nIndex).hidden && inModel.get(nIndex).name !== "") count++;
+    }
+    return count;
+}
+
 function getDir(x, y) {
-    if(x > leftDir.x && x < leftDir.x + leftDir.width && y > leftDir.y && y < leftDir.y + leftDir.height) {
+/*    if(x > leftDir.x && x < leftDir.x + leftDir.width && y > leftDir.y && y < leftDir.y + leftDir.height) {
         return {dir:"left", x:(x - leftDir.x), y:(y - leftDir.y)};
     }
-    else if(x > rightDir.x && x < rightDir.x + rightDir.width && y > rightDir.y && y < rightDir.y + rightDir.height) {
+    else */if(x > rightDir.x && x < rightDir.x + rightDir.width && y > rightDir.y && y < rightDir.y + rightDir.height) {
         return {dir:"right", x:(x - rightDir.x), y:(y - rightDir.y)};
     }
-    else if(x > topDir.x && x < topDir.x + topDir.width && y > topDir.y && y < topDir.y + topDir.height) {
-        return {dir:"top", x:(x - topDir.x), y:(y - topDir.y)};
-    }
-    else if(x > bottomDir.x && x < bottomDir.x + bottomDir.width && y > bottomDir.y && y < bottomDir.y + bottomDir.height) {
-        return {dir:"bottom", x:(x - bottomDir.x), y:(y - bottomDir.y)};
-    }
+//    else if(x > topDir.x && x < topDir.x + topDir.width && y > topDir.y && y < topDir.y + topDir.height) {
+//        return {dir:"top", x:(x - topDir.x), y:(y - topDir.y)};
+//    }
+//    else if(x > bottomDir.x && x < bottomDir.x + bottomDir.width && y > bottomDir.y && y < bottomDir.y + bottomDir.height) {
+//        return {dir:"bottom", x:(x - bottomDir.x), y:(y - bottomDir.y)};
+//    }
     return {dir:"none"};
 }
 
