@@ -1,13 +1,13 @@
 import QtQuick 2.0
 
 DropArea {
-    signal dropActive(bool active)
+    signal dropState(bool active)
 
     property int allowedIndex: 1
 
     id: dropTarget
 
-    onContainsDragChanged: if(index < allowedIndex) dropActive(containsDrag)
+    onContainsDragChanged: if(index < allowedIndex) dropState(containsDrag)
 
     Rectangle {
         id: rect
@@ -24,7 +24,7 @@ DropArea {
                     color: "grey"
                 }
                 StateChangeScript {
-                    script: console.log("dropArea", index)
+                    script: console.log("dropArea", index, "\n")
                 }
             }
         ]

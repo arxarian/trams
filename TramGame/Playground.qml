@@ -285,10 +285,10 @@ Item {
             height: cellHeight
             allowedIndex: rightDeck.count + 1 - Scripts.canRemove(rightDeck)
 
-            onDropActive: {
+            onDropState: {
                 console.log("right", index, active)
-                var mapped = draggedItem.mapToItem(playground, 0, 0);
-                var dir = Scripts.getDir(mapped.x, mapped.y)
+//                var mapped = draggedItem.mapToItem(playground, 0, 0);
+//                var dir = Scripts.getDir(mapped.x, mapped.y)
 
                 if(active) { // pořadí nezaručeno?!
                     newIndex = index;
@@ -297,7 +297,7 @@ Item {
                         if(index < rightDeck.count + 1) {
                             rightDeck.insert(index, {name: "-", hidden: true})
                         }
-                        lastDir = "right";
+                        lastDir = rightDropArea.dir;
                     }
                     else if(lastDir === rightDropArea.dir) {
                         console.log("from", lastIndex, "to", index)
@@ -316,15 +316,15 @@ Item {
                 }
                 else {
 //                    console.log("else",index)
-                    if(rightDeck.get(index).hidden && dir.dir !== "right") {
-                        console.log("should remove", index, "lastDir", lastDir, "newIndex", newIndex, "can remove", Scripts.canRemove(rightDeck),"dir", dir.dir,"removed")
+//                    if(/*rightDeck.get(index).hidden && */dir.dir !== "right"/* && lastIndex != index*/) {// s tímhle to funuje i na první vložení
+                        console.log("should remove", index, "lastDir", lastDir, "newIndex", newIndex, "can remove", Scripts.canRemove(rightDeck),"dir", dir,"removed")
 //                        console.log()
 
 //                        if(lastDir === "none" || newIndex !== lastIndex) {
                             rightDeck.remove(index);
 //                            console.log()
 //                        }
-                    }
+//                    }
 //                    else if(dir === lastDir) {
 //                        rightDeck.move(lastIndex, index)
 //                        lastIndex = index;
@@ -352,6 +352,7 @@ Item {
         interactive: false
         model: rightDeck
         delegate: TramCell {
+            allowedIndex: rightDeck.count + 1 - Scripts.canRemove(rightDeck)
 //            borderColor: "maroon"
         }
 

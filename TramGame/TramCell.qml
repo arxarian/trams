@@ -7,6 +7,7 @@ Rectangle {
 //    property color borderColor: "gold"
 //    property string text: "none"
 //    property string dir: "none"
+    property int allowedIndex: 1
 
     id: root
     height: cellHeight
@@ -24,8 +25,11 @@ Rectangle {
         visible: !hidden
 
         onReleased: {
-            parent = delegate.Drag.target !== null ? delegate.Drag.target : root
-//            if(lastDir !== "none") {
+//            if(index < allowedIndex) {
+                console.log("ok", index, allowedIndex)
+                parent = delegate.Drag.target !== null ? delegate.Drag.target : root
+//            }
+                //            if(lastDir !== "none") {
                 playground.cellPlaced = !playground.cellPlaced;
 //            }
         }
