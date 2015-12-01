@@ -5,7 +5,6 @@ import "qrc:/scripts.js" as Scripts
 Item {
     property alias timerActive: timer.running
 
-    property var draggedItem: []
     property bool dragActive: false
     property bool newCard: false // TODO: předělat na signals&slots
     property int rows: 9
@@ -15,15 +14,6 @@ Item {
 
     property string lastDir: "none"
     property int lastIndex: -1
-    property int newIndex: -1
-
-    property var lastModel: []
-    property var newModel: []
-
-    property bool removeCell: false
-    property int removeIndex: -1
-
-    property bool cellPlaced: false
 
     property bool canDrop: false
 
@@ -56,7 +46,9 @@ Item {
     }
 
 //    onLastDirChanged: console.log("lastDir", lastDir)
-    onLastIndexChanged: console.log("lastIndex", lastIndex)
+//    onLastIndexChanged: console.log("lastIndex", lastIndex)
+
+    onDragActiveChanged: console.log("drag active", dragActive);
 
 //    onCellPlacedChanged: {
 //        console.log("count dect", rightDeck.count)
@@ -115,7 +107,7 @@ Item {
 //        ListElement {
 //            name: "right second"; hidden: false
 //        }
-        onCountChanged: console.log("count", count)
+//        onCountChanged: console.log("count", count)
     }
 
     // TOP
@@ -288,10 +280,9 @@ Item {
             allowedIndex: rightDeck.count + 1 - Scripts.canRemove(rightDeck)
 
             onDropState: {
-                console.log("right", index, active)
+//                console.log("right", index, active)
 
                 if(active) { // pořadí nezaručeno?!
-                    newIndex = index;
 
                     if(lastDir !== rightDropArea.dir) {
                         if(index < rightDeck.count + 1) {
@@ -317,7 +308,7 @@ Item {
                 else {
 //                    console.log("else",index)
                     if(/*rightDeck.get(index).hidden && */rightDropArea.dir !== "right"/* && lastIndex != index*/) {// s tímhle to funuje i na první vložení
-                        console.log("should remove", index, "lastDir", lastDir, "newIndex", newIndex, "can remove", Scripts.canRemove(rightDeck),"dir", playground.dir,"removed")
+                        console.log("should remove", index, "lastDir", lastDir, "can remove", Scripts.canRemove(rightDeck),"dir", playground.dir,"removed")
 //                        console.log()
 
 //                        if(lastDir === "none" || newIndex !== lastIndex) {

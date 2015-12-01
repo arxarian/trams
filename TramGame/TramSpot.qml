@@ -21,8 +21,6 @@ DropArea {
         id: rect
         anchors.fill: parent
         color: "#70707070"
-//        border.width: 1
-//        border.color: "gold"
 
         states: [
             State {
