@@ -25,6 +25,8 @@ Item {
 
     property bool cellPlaced: false
 
+    property bool canDrop: false
+
     id: playground
 
     anchors.fill: parent
@@ -287,8 +289,6 @@ Item {
 
             onDropState: {
                 console.log("right", index, active)
-//                var mapped = draggedItem.mapToItem(playground, 0, 0);
-//                var dir = Scripts.getDir(mapped.x, mapped.y)
 
                 if(active) { // pořadí nezaručeno?!
                     newIndex = index;
@@ -316,20 +316,20 @@ Item {
                 }
                 else {
 //                    console.log("else",index)
-//                    if(/*rightDeck.get(index).hidden && */dir.dir !== "right"/* && lastIndex != index*/) {// s tímhle to funuje i na první vložení
-                        console.log("should remove", index, "lastDir", lastDir, "newIndex", newIndex, "can remove", Scripts.canRemove(rightDeck),"dir", dir,"removed")
+                    if(/*rightDeck.get(index).hidden && */rightDropArea.dir !== "right"/* && lastIndex != index*/) {// s tímhle to funuje i na první vložení
+                        console.log("should remove", index, "lastDir", lastDir, "newIndex", newIndex, "can remove", Scripts.canRemove(rightDeck),"dir", playground.dir,"removed")
 //                        console.log()
 
 //                        if(lastDir === "none" || newIndex !== lastIndex) {
                             rightDeck.remove(index);
 //                            console.log()
 //                        }
-//                    }
+                    }
 //                    else if(dir === lastDir) {
 //                        rightDeck.move(lastIndex, index)
 //                        lastIndex = index;
 //                    }
-                    lastDir = dir.dir;
+                    lastDir = rightDropArea.dir;
 
 //                    console.log(index, "not taken")
                 }

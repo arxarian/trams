@@ -7,7 +7,15 @@ DropArea {
 
     id: dropTarget
 
-    onContainsDragChanged: if(index < allowedIndex) dropState(containsDrag)
+    onContainsDragChanged: {
+        if(index < allowedIndex) {
+            playground.canDrop = true;
+            dropState(containsDrag);
+        }
+        else {
+            playground.canDrop = false;
+        }
+    }
 
     Rectangle {
         id: rect

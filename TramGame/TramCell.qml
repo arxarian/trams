@@ -25,13 +25,13 @@ Rectangle {
         visible: !hidden
 
         onReleased: {
-//            if(index < allowedIndex) {
+            if(playground.canDrop) {
                 console.log("ok", index, allowedIndex)
                 parent = delegate.Drag.target !== null ? delegate.Drag.target : root
 //            }
                 //            if(lastDir !== "none") {
                 playground.cellPlaced = !playground.cellPlaced;
-//            }
+            }
         }
 
         Rectangle {
