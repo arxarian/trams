@@ -3,11 +3,12 @@ import "qrc:/scripts.js" as Scripts
 
 Rectangle {
 
-//    property bool movable: true
+    property bool movable: false
 //    property color borderColor: "gold"
 //    property string text: "none"
 //    property string dir: "none"
     property int allowedIndex: 1
+    property alias pressed: mouseArea.pressed
 
     id: root
     height: cellHeight
@@ -19,10 +20,12 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        drag.target: delegate
+        drag.target: movable ? delegate : undefined
 
         enabled: !hidden
         visible: !hidden
+
+//        onPressedChanged: console.log("pressed", pressed);
 
         onReleased: {
             if(playground.canDrop) {
@@ -55,7 +58,7 @@ Rectangle {
 
             states: State {
                 when: mouseArea.drag.active
-                PropertyChanges {target: playground; dragActive: true}
+//                PropertyChanges {target: playground; dragActive: true}
                 ParentChange { target: delegate; parent: playground }
                 AnchorChanges { target: delegate; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
             }

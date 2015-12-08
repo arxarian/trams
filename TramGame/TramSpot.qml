@@ -8,6 +8,8 @@ DropArea {
     id: dropTarget
 
     onContainsDragChanged: {
+        if(containsDrag) playground.karma++;
+        else playground.karma--;
         if(index < allowedIndex) {
             playground.canDrop = true;
             dropState(containsDrag);
@@ -30,7 +32,7 @@ DropArea {
                     color: "grey"
                 }
                 StateChangeScript {
-                    script: console.log("dropArea", index, "\n")
+                    script: console.log("dropArea", index)
                 }
             }
         ]
