@@ -3,6 +3,8 @@ import QtQml.Models 2.2
 import "qrc:/scripts.js" as Scripts
 
 Item {
+    property int animationLenght: 200
+
     property bool firstPlacementActive: false
 //    property bool cellMoving: false
     property bool newCard: false // TODO: předělat na signals&slots
@@ -39,16 +41,29 @@ Item {
         }
     }
 
+    function setCard(inModel) {
+        for(var index = 0; index < inModel.count; index++) {
+//                console.log("name", rightDeck.get(index).name, rightDeck.get(index).hidden)
+            if(inModel.get(index).hidden) {
+                inModel.set(index, deckModel.get(0));
+                inModel.setProperty(index, "hidden", false);
+                deckModel.clear();
+            }
+        }
+    }
+
     onPlaceCellChanged: {
         if(lastDir === "right") {
-            for(var index = 0; index < rightDeck.count; index++) {
-//                console.log("name", rightDeck.get(index).name, rightDeck.get(index).hidden)
-                if(rightDeck.get(index).hidden) {
-                    rightDeck.setProperty(index, "name", deckModel.get(0).name);
-                    rightDeck.setProperty(index, "hidden", false);
-                    deckModel.clear();
-                }
-            }
+            setCard(rightDeck);
+        }
+        else if(lastDir === "bottom") {
+            setCard(bottomDeck);
+        }
+        else if(lastDir === "top") {
+            setCard(topDeck);
+        }
+        else if(lastDir === "left") {
+            setCard(leftDeck);
         }
     }
     ListModel {
@@ -68,9 +83,6 @@ Item {
         }
         ListElement {
             name: "bottom second"; hidden: false
-        }
-        ListElement {
-            name: "bottom thrid"; hidden: false
         }
     }
 
@@ -94,23 +106,27 @@ Item {
         }
     }
 
-    // TOP
-    ListView {
-        property int cells: (playground.rows - 1) / 2
+//    // TOP
+//    ListView {
+//        property int cells: (playground.rows - 1) / 2
 
-        id: top
-        anchors.bottom: middle.top
-        anchors.left: middle.left
-        height: cells * cellHeight
-        width: parent.width / playground.columns
+//        id: top
+//        anchors.bottom: middle.top
+//        anchors.left: middle.left
+//        height: cells * cellHeight
+//        width: parent.width / playground.columns
 
-        verticalLayoutDirection: ListView.BottomToTop
-        interactive: false
-        model: topDeck
-        delegate: TramCell {
-//            borderColor: "green"
-        }
-    }
+//        verticalLayoutDirection: ListView.BottomToTop
+//        interactive: false
+//        model: topDeck
+//        delegate: TramCell {
+//            allowedIndex: rightDeck.count + 1 - Scripts.canRemove(rightDeck)
+
+//            onPressedChanged: {
+//                console.log("pressed", pressed);
+//            }
+//        }
+//    }
 
     ListModel {
         id: deckModel
@@ -171,144 +187,62 @@ Item {
             }
         }
     }
-    // BOTTOM
-    ListView {
-        property int cells: (playground.rows - 1) / 2
 
-        id: bottom
-        anchors.top: middle.bottom
+    OneDirection {  // TOP
+        id: topDir
+        anchors.top: parent.top
         anchors.left: middle.left
-        height: cells * cellHeight
+        anchors.bottom: middle.top
         width: parent.width / playground.columns
 
-        interactive: false
-        model: bottomDeck
-        delegate: TramCell {
-//            borderColor: "green"
-        }
+        dir: "top"
+        layourDir: Qt.LeftToRight
+        layoutOrient: Qt.Vertical
+        cells: (playground.rows - 1) / 2
+        deck: topDeck
+        verticalLayout: ListView.BottomToTop
     }
-    // LEFT
-    ListView {
-        property int cells: (playground.columns - 1) / 2
 
-        id: left
+    OneDirection {  // BOTTOM
+        id: bottomDir
+        anchors.top: middle.bottom
+        anchors.left: middle.left
+        anchors.bottom: parent.bottom
+        width: parent.width/ playground.columns
+
+        dir: "bottom"
+        layourDir: Qt.LeftToRight
+        layoutOrient: Qt.Vertical
+        cells: (playground.rows - 1) / 2
+        deck: bottomDeck
+    }
+
+    OneDirection {  // LEFT
+        id: leftDir
         anchors.top: middle.top
         anchors.right: middle.left
-        height: parent.height/ playground.rows
-        width: cells * cellWidth
+        anchors.left: parent.left
+        height: parent.height / playground.rows
 
-        layoutDirection: Qt.RightToLeft
-        orientation: Qt.Horizontal
-        interactive: false
-        model: leftDeck
-        delegate: TramCell {
-//            text: name
-//            borderColor: "maroon"
-        }
-
-//        add: Transition {
-//            NumberAnimation { properties: "x,y"; from: -200; duration: 1000 }
-//        }
-//        addDisplaced: Transition {
-//            NumberAnimation { properties: "x,y"; duration: 1000 }
-//        }
-
-//        move: Transition {
-//            NumberAnimation { properties: "x,y"; duration: 1000 }
-//        }
+        dir: "left"
+        layourDir: Qt.RightToLeft
+        layoutOrient: Qt.Horizontal
+        cells: (playground.columns - 1) / 2
+        deck: leftDeck
     }
 
-    // RIGHT DropArea
-    ListView {
-
-        function rightIndex(x, y) {
-            return right.indexAt(x + cellWidth / 2, y)
-        }
-
-        property int cells: (playground.columns - 1) / 2
-        property string dir: "right"
-
-        id: rightDropArea
+    OneDirection {  // RIGHT
+        id: rightDir
         anchors.top: middle.top
         anchors.left: middle.right
+        anchors.right: parent.right
         height: parent.height / playground.rows
-        width: cells * cellWidth
 
-        orientation: Qt.Horizontal
-        interactive: false
-        model: cells
-        delegate: TramSpot {
-            width: cellWidth
-            height: cellHeight
-            allowedIndex: rightDeck.count + 1 - Scripts.canRemove(rightDeck)
-
-            onDropState: {
-                console.log("right", index, active)
-
-                if(active) { // pořadí nezaručeno?!
-
-                    if((lastDir !== rightDropArea.dir || playground.karma == 1)/* && !cellMoving*/) {
-                        if(index < rightDeck.count + 1) {
-                            rightDeck.insert(index, {name: "", hidden: true})
-                        }
-                        lastDir = rightDropArea.dir;
-                    }
-                    else if(lastDir === rightDropArea.dir) {
-//                        console.log("from", lastIndex, "to", index)
-                        rightDeck.move(lastIndex, index, 1)
-                    }
-                    lastIndex = index
-                }
-                else {
-                    if(rightDropArea.dir !== "right" || (playground.karma == 0 && firstPlacementActive)) {
-//                        console.log("should remove", index, "lastDir", lastDir, "can remove", Scripts.canRemove(rightDeck),"dir", playground.dir,"removed")
-                            rightDeck.remove(index);
-                    }
-                    lastDir = rightDropArea.dir;
-                }
-            }
-        }
-    }
-    // RIGHT
-    ListView {
-        property int cells: (playground.columns - 1) / 2
-
-        id: right
-        anchors.top: middle.top
-        anchors.left: middle.right
-        height: parent.height / playground.rows
-        width: cells * cellWidth
-
-        orientation: Qt.Horizontal
-        interactive: false
-        model: rightDeck
-        delegate: TramCell {
-            allowedIndex: rightDeck.count + 1 - Scripts.canRemove(rightDeck)
-
-            onPressedChanged: {
-                console.log("pressed", pressed);
-//                playground.cellMoving = pressed
-            }
-        }
-
-        add: Transition {
-            NumberAnimation { properties: "x,y"; from: -200; duration: 1000 }
-        }
-        addDisplaced: Transition {
-            NumberAnimation { properties: "x,y"; duration: 1000 }
-        }
-
-        move: Transition {
-            NumberAnimation { properties: "x,y"; duration: 500 }
-        }
-
-        moveDisplaced: Transition {
-            NumberAnimation { properties: "x,y"; duration: 500 }
-        }
-
-        removeDisplaced: Transition {
-            NumberAnimation { properties: "x,y"; duration: 500 }
-        }
+        dir: "right"
+        layourDir: Qt.LeftToRight
+        layoutOrient: Qt.Horizontal
+        cells: (playground.columns - 1) / 2
+        deck: rightDeck
     }
 }
 

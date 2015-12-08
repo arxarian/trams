@@ -36,6 +36,8 @@ DropArea {
                 }
             }
         ]
+
+        Behavior on color {ColorAnimation{duration: playground.animationLenght}}
     }
 }
 
