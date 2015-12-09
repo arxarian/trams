@@ -3,6 +3,8 @@ import QtQml.Models 2.2
 import "qrc:/scripts.js" as Scripts
 
 Item {
+    property bool check: false
+
     property int animationLenght: 200
 
     property bool firstPlacementActive: false
@@ -28,16 +30,98 @@ Item {
 
     onKarmaChanged: console.log("karma", karma)
     onNewCardChanged: {
-        // mark another card as added
-        // potenciálně nekonečná smyčka
-        while(true) {
-            var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
-            console.log(randomIndex)
-            if(!dataModel.getItem(randomIndex).added) {
-                dataModel.setItem(randomIndex, {"added":true})
-                Scripts.updateVisibleModel(randomIndex, dataModel, visibleModel);
-                break;
-            } else {console.log("conflict detected")}
+        if(deckModel.count == 0) {
+            // mark another card as added
+            // potenciálně nekonečná smyčka
+            while(true) {
+                var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
+                console.log(randomIndex)
+                if(!dataModel.data[randomIndex].added) {
+                    dataModel.data[randomIndex].added = true;
+                    dataModel.data[randomIndex].hidden = false;
+                    deckModel.append(dataModel.getItem(randomIndex))
+                    break;
+                }
+                else {
+                    console.log("conflict detected")
+                }
+            }
+        }
+    }
+
+    onCheckChanged: {
+        var goodPlace = true;
+        if(lastDir === "right") {
+            if(lastIndex == 0) {
+               if(middleDeck.get(0).longitude > rightDeck.get(lastIndex).longitude) {
+                   goodPlace = false;
+               }
+            }
+            else {
+                if(rightDeck.get(lastIndex - 1).longitude > rightDeck.get(lastIndex).longitude) {
+                    goodPlace = false;
+                }
+            }
+            if(lastIndex < rightDeck.count - 1) {
+                if(rightDeck.get(lastIndex).longitude > rightDeck.get(lastIndex + 1).longitude) {
+                    goodPlace = false;
+                }
+            }
+            console.log("placement", goodPlace)
+        }
+        else if(lastDir === "left") {
+            if(lastIndex == 0) {
+               if(middleDeck.get(0).longitude < leftDeck.get(lastIndex).longitude) {
+                   goodPlace = false;
+               }
+            }
+            else {
+                if(leftDeck.get(lastIndex - 1).longitude < leftDeck.get(lastIndex).longitude) {
+                    goodPlace = false;
+                }
+            }
+            if(lastIndex < rightDeck.count - 1) {
+                if(leftDeck.get(lastIndex).longitude < leftDeck.get(lastIndex + 1).longitude) {
+                    goodPlace = false;
+                }
+            }
+            console.log("placement", goodPlace)
+        }
+        else if(lastDir === "top") {
+            if(lastIndex == 0) {
+               if(middleDeck.get(0).latitude > topDeck.get(lastIndex).latitude) {
+                   goodPlace = false;
+               }
+            }
+            else {
+                if(topDeck.get(lastIndex - 1).latitude > topDeck.get(lastIndex).latitude) {
+                    goodPlace = false;
+                }
+            }
+            if(lastIndex < rightDeck.count - 1) {
+                if(topDeck.get(lastIndex).latitude > topDeck.get(lastIndex + 1).latitude) {
+                    goodPlace = false;
+                }
+            }
+            console.log("placement", goodPlace)
+        }
+        else if(lastDir === "bottom") {
+            if(lastIndex == 0) {
+               if(middleDeck.get(0).latitude < bottomDeck.get(lastIndex).latitude) {
+                   goodPlace = false;
+               }
+            }
+            else {
+                if(bottomDeck.get(lastIndex - 1).latitude < bottomDeck.get(lastIndex).latitude) {
+                    goodPlace = false;
+                }
+            }
+            if(lastIndex < rightDeck.count - 1) {
+                if(bottomDeck.get(lastIndex).latitude < bottomDeck.get(lastIndex + 1).latitude) {
+                    goodPlace = false;
+                }
+            }
+            console.log("placement", goodPlace)
         }
     }
 
@@ -46,7 +130,6 @@ Item {
 //                console.log("name", rightDeck.get(index).name, rightDeck.get(index).hidden)
             if(inModel.get(index).hidden) {
                 inModel.set(index, deckModel.get(0));
-                inModel.setProperty(index, "hidden", false);
                 deckModel.clear();
             }
         }
@@ -68,65 +151,20 @@ Item {
     }
     ListModel {
         id: topDeck
-        ListElement {
-            name: "top first"; hidden: false
-        }
-        ListElement {
-            name: "top second"; hidden: false
-        }
     }
 
     ListModel {
         id: bottomDeck
-        ListElement {
-            name: "bottom first"; hidden: false
-        }
-        ListElement {
-            name: "bottom second"; hidden: false
-        }
     }
 
     ListModel {
         id: leftDeck
-        ListElement {
-            name: "left first"; hidden: false
-        }
-        ListElement {
-            name: "left second"; hidden: false
-        }
     }
 
     ListModel {
         id: rightDeck
-        ListElement {
-            name: "right first"; hidden: false
-        }
-        ListElement {
-            name: "right second"; hidden: false
-        }
+//        onCountChanged: console.log("count", count)
     }
-
-//    // TOP
-//    ListView {
-//        property int cells: (playground.rows - 1) / 2
-
-//        id: top
-//        anchors.bottom: middle.top
-//        anchors.left: middle.left
-//        height: cells * cellHeight
-//        width: parent.width / playground.columns
-
-//        verticalLayoutDirection: ListView.BottomToTop
-//        interactive: false
-//        model: topDeck
-//        delegate: TramCell {
-//            allowedIndex: rightDeck.count + 1 - Scripts.canRemove(rightDeck)
-
-//            onPressedChanged: {
-//                console.log("pressed", pressed);
-//            }
-//        }
-//    }
 
     ListModel {
         id: deckModel
@@ -166,25 +204,34 @@ Item {
     ListView {
         property int cells: 1
 
+        ListModel {
+            id: middleDeck
+
+            Component.onCompleted: {
+                var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);//6
+                dataModel.data[randomIndex].added = true;
+                dataModel.data[randomIndex].hidden = false;
+                middleDeck.append(dataModel.data[randomIndex])
+            }
+        }
+
         id: middle
         anchors.centerIn: parent
         width: parent.width / playground.columns
         height: parent.height / playground.rows
 
         interactive: false
-        model: cells
+        model: middleDeck
         delegate: TramCell {
-            property string name: "middle"
-            property bool hidden: false
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if(deckModel.count == 0) {
-                        deckModel.append({name:"appended", hidden:false})
-                    }
-                }
-            }
+//            MouseArea {
+//                anchors.fill: parent
+//                onClicked: {
+//                    if(deckModel.count == 0) {
+//                        deckModel.append({name:"appended", hidden:false})
+//                    }
+//                }
+//            }
         }
     }
 

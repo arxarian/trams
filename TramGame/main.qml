@@ -14,21 +14,37 @@ Window {
         anchors.fill: parent
     }
 
-//    Rectangle {
+    Rectangle {
+        width: 100
+        height: 100
+        anchors.bottom: parent.bottom
+        color: "silver"
+        Text {
+            anchors.centerIn: parent
+            text: "new card"
+        }
 
-//        width: 100
-//        height: 100
-//        anchors.bottom: parent.bottom
-//        color: "silver"
-//        Text {
-//            anchors.centerIn: parent
-//            text: "new card"
-//        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: playground.newCard = !playground.newCard
+        }
+    }
 
-//        MouseArea {
-//            anchors.fill: parent
-//            onClicked: playground.newCard = !playground.newCard
-//        }
-//    }
+    Rectangle {
+        width: 100
+        height: 100
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        color: "silver"
+        Text {
+            anchors.centerIn: parent
+            text: "check positions"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: playground.check = !playground.check
+        }
+    }
 }
 

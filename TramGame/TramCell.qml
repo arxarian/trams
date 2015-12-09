@@ -50,7 +50,12 @@ Rectangle {
 
             Text {
                 anchors.centerIn: parent
+                height: parent.height * 0.95
+                width: parent.width * 0.95
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 text: name
+                wrapMode: Text.WordWrap
             }
 
 //            Behavior on x {NumberAnimation {duration: 300}}

@@ -94,6 +94,64 @@ function downIndex(index) {
     return nDownIndex > nRows * nColumns - 1 ? -1 : nDownIndex;
 }
 
+//function checkRight(referenceCard, inModel) {   // TODO: totálně předělat (např. dočasně vše vrazit do jednoho modelu, tím se vyhnu dvě šíleným cyklům)
+//    var nLastCorrectIndex = 0;
+//    var nIndex = 0;
+//    while(nIndex < inModel.count) {
+//        console.log(referenceCard.name, inModel.get(nIndex).name, referenceCard.longitude, "<", inModel.get(nIndex).longitude)
+//        if(referenceCard.longitude < inModel.get(nIndex).longitude) {
+//            nLastCorrectIndex = nIndex;
+//            break;
+//        }
+//        console.log("while bad right position", nIndex)
+//        nIndex++
+//    }
+
+//    for(nIndex = nLastCorrectIndex; nIndex < inModel.count - 1; nIndex++) {
+//        console.log(inModel.get(nLastCorrectIndex).name, inModel.get(nIndex + 1).name, inModel.get(nLastCorrectIndex).longitude, "<", inModel.get(nIndex + 1).longitude)
+//        if(inModel.get(nLastCorrectIndex).longitude < inModel.get(nIndex + 1).longitude) {
+//            nLastCorrectIndex = nIndex + 1;
+//        }
+//        else {
+//            console.log("for bad right position", nIndex)
+//        }
+//    }
+//}
+
+function duplicateArray(referenceCard, originalModel) {
+
+    var outModel = []
+    outModel.push(referenceCard);
+    for(var nIndex = 0; nIndex < originalModel.count; nIndex++) {
+        outModel.push(originalModel.get(nIndex));
+    }
+    return outModel;
+}
+
+function checkRight(referenceCard, originalModel) {   // TODO: totálně předělat (např. dočasně vše vrazit do jednoho modelu, tím se vyhnu dvě šíleným cyklům)
+
+    var model = duplicateArray(referenceCard, originalModel)
+
+    var nLastCorrectIndex = 0;
+
+    for(var nIndex = 1; nIndex < model.length; nIndex++) {
+        console.log(model[nLastCorrectIndex].name, model[nIndex].name, model[nLastCorrectIndex].longitude, "<", model[nIndex].longitude)
+        if(model[nLastCorrectIndex].longitude < model[nIndex].longitude) {
+            nLastCorrectIndex = nIndex;
+            console.log("ok 0")
+            continue;
+        }
+        if(nLastCorrectIndex - 1 < 0);
+        else if(model[nLastCorrectIndex - 1].longitude < model[nIndex].longitude) {
+            nLastCorrectIndex = nLastCorrectIndex - 1;
+            console.log("ok 0")
+            continue;
+        }
+
+        console.log("while bad right position", nIndex)
+    }
+}
+
 function checkPosition(index, model) {
 
     var location = true;
