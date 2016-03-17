@@ -59,11 +59,12 @@ Item {
         interactive: false
         model: root.deck
         delegate: TramCell {
+            dir: root.dir
             allowedIndex: root.deck.count + 1 - Scripts.canRemove(root.deck)
 
-            onPressedChanged: {
-                console.log("pressed", pressed);
-            }
+//            onPressedChanged: {
+//                console.log("pressed", pressed);
+//            }
         }
 
         addDisplaced: Transition {

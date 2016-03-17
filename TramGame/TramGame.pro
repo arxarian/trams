@@ -17,3 +17,5 @@ include(deployment.pri)
 HEADERS += \
     dataobject.h
 
+OTHER_FILES += notes.txt
+

@@ -3,17 +3,15 @@ import "qrc:/scripts.js" as Scripts
 
 Rectangle {
 
-    property bool movable: false
-//    property color borderColor: "gold"
-//    property string text: "none"
-//    property string dir: "none"
+    property bool movable: playground.lastIndex === index && playground.lastDir === dir
+    property string dir: "none"
     property int allowedIndex: 1
     property alias pressed: mouseArea.pressed
 
     id: root
     height: cellHeight
     width: cellWidth
-    color: "transparent"
+    color: playground.lastDir === dir && playground.lastIndex === index && !playground.goodPlace ? "darkred" : "transparent"
     border.width: 1
     border.color: hidden ? "#700000ff" : "#70ff0000"
 
@@ -25,13 +23,13 @@ Rectangle {
         enabled: !hidden
         visible: !hidden
 
-//        onPressedChanged: console.log("pressed", pressed);
-
         onReleased: {
             if(playground.canDrop) {
                 parent = delegate.Drag.target !== null ? delegate.Drag.target : root
             }
         }
+
+        onClicked: console.log(/*"movable", movable, "lastIndex", lastIndex, "index", index, "lastDir", lastDir, "dir", dir*/ "show info!")
 
         Rectangle {
 

@@ -8,7 +8,7 @@ Item {
     property int animationLenght: 200
 
     property bool firstPlacementActive: false
-//    property bool cellMoving: false
+    property bool cellMoving: false
     property bool newCard: false // TODO: předělat na signals&slots
     property int rows: 9
     property int columns: 9
@@ -24,12 +24,14 @@ Item {
 
     property int karma: 0
 
+    property bool goodPlace: true
+
 
     id: playground
     anchors.fill: parent
 
     onKarmaChanged: console.log("karma", karma)
-    onNewCardChanged: {
+    onNewCardChanged: { // tento slot generuje nové karty do deckModel
         if(deckModel.count == 0) {
             // mark another card as added
             // potenciálně nekonečná smyčka
@@ -40,6 +42,7 @@ Item {
                     dataModel.data[randomIndex].added = true;
                     dataModel.data[randomIndex].hidden = false;
                     deckModel.append(dataModel.getItem(randomIndex))
+                    playground.goodPlace = true
                     break;
                 }
                 else {
@@ -49,8 +52,11 @@ Item {
         }
     }
 
-    onCheckChanged: {
-        var goodPlace = true;
+    onCheckChanged: checkPosition();
+
+    // kontrola všech karet ve všech směrech, velké TODO! na refaktoring
+    function checkPosition() {
+        playground.goodPlace = true;
         if(lastDir === "right") {
             if(lastIndex == 0) {
                if(middleDeck.get(0).longitude > rightDeck.get(lastIndex).longitude) {
@@ -125,12 +131,13 @@ Item {
         }
     }
 
+    // nalezne první volnou pozici (hidden atribut je true a dosadí tam tu kartu)
     function setCard(inModel) {
         for(var index = 0; index < inModel.count; index++) {
-//                console.log("name", rightDeck.get(index).name, rightDeck.get(index).hidden)
             if(inModel.get(index).hidden) {
                 inModel.set(index, deckModel.get(0));
                 deckModel.clear();
+                break;
             }
         }
     }
@@ -148,6 +155,7 @@ Item {
         else if(lastDir === "left") {
             setCard(leftDeck);
         }
+        playground.check = !playground.check
     }
     ListModel {
         id: topDeck
@@ -163,7 +171,6 @@ Item {
 
     ListModel {
         id: rightDeck
-//        onCountChanged: console.log("count", count)
     }
 
     ListModel {
@@ -183,10 +190,8 @@ Item {
         delegate: TramCell {
             movable: true
             onPressedChanged: {
-//                console.log("pressed delegate", pressed);
                 firstPlacementActive = pressed;
                 if(!pressed && playground.karma) {
-//                    console.log("make it still in", lastDir)
                     playground.placeCell = !playground.placeCell
                 }
             }
@@ -207,6 +212,7 @@ Item {
         ListModel {
             id: middleDeck
 
+            // náhodné vybrání první karty
             Component.onCompleted: {
                 var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);//6
                 dataModel.data[randomIndex].added = true;
@@ -222,17 +228,7 @@ Item {
 
         interactive: false
         model: middleDeck
-        delegate: TramCell {
-
-//            MouseArea {
-//                anchors.fill: parent
-//                onClicked: {
-//                    if(deckModel.count == 0) {
-//                        deckModel.append({name:"appended", hidden:false})
-//                    }
-//                }
-//            }
-        }
+        delegate: TramCell {}
     }
 
     OneDirection {  // TOP

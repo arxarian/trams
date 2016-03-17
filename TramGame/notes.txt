@@ -1,0 +1,13 @@
+-kontrolovat pozici pouze právě položené karty, jnak to ztrácí význam
+--příklad
+        střed       Bílá Hora
+
+        1. kolo     Albertov umísten východně od Bílé Hory
+                        -umístění je ok
+
+        2. kolo     Invalidovna umístě mezi Bílou Horu a Albertov
+                        -nyní je špatně umísteň Albertov!
+
+TODO: drag.axis: Drag.YAxis pro přesouvání kartičky pouze v jednom směru
+TODO: všechny směry budou mít jako nultou kartu střed a jako poslední něco hodně velkého
+TODO: kontrolovat kartu ihned
