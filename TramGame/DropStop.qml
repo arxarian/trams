@@ -1,6 +1,8 @@
 import QtQuick 2.0
 
 DropArea {
+    property bool containsStop: children.length > 1
+
     id: dragTarget
 
     Rectangle {
@@ -13,7 +15,7 @@ DropArea {
 
         states: [
             State {
-                when: dragTarget.containsDrag
+                when: dragTarget.containsDrag && !containsStop
                 PropertyChanges {
                     target: dropRectangle
                     color: "grey"

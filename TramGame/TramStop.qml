@@ -16,8 +16,6 @@ Item {
 
         color: "blue"
 
-//        onXChanged: console.log(x, y)
-
         Drag.active: mouseArea.drag.active
         Drag.hotSpot.x: width / 2
         Drag.hotSpot.y: height / 2
@@ -56,19 +54,22 @@ Item {
             anchors.fill: parent
             drag.target: draggedItem
             onReleased: {
-                draggedItem.enableAnimation = false
+                if(draggedItem.Drag.target === null)
+                {
+                    // do nothing
+                }
+                else if(!draggedItem.Drag.target.containsStop) {
+                    var dropPos = playground.mapFromItem(draggedItem.Drag.target);
+                    var dragPos = playground.mapFromItem(draggedItem)
 
-                var dropPos = playground.mapFromItem(draggedItem.Drag.target);
-                var dragPos = playground.mapFromItem(draggedItem)
+                    root.x = root.y = 0;
+                    root.parent = draggedItem.Drag.target   // reparentuje mouseareu
 
-                root.x = root.y = 0;
-
-                root.parent = draggedItem.Drag.target !== null ? draggedItem.Drag.target : root  // reparentuje mouseareu
-                draggedItem.x = dragPos.x - dropPos.x;
-                draggedItem.y = dragPos.y - dropPos.y;
-
-                draggedItem.enableAnimation = true
-
+                    draggedItem.enableAnimation = false
+                    draggedItem.x = dragPos.x - dropPos.x;
+                    draggedItem.y = dragPos.y - dropPos.y;
+                    draggedItem.enableAnimation = true
+                }
                 draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
                 draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
             }
