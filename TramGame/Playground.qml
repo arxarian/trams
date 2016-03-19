@@ -1,48 +1,33 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQml.Models 2.2
 import "qrc:/scripts.js" as Scripts
 
 Item {
-    property bool check: false
+//    property bool check: false
 
-    property int animationLenght: 200
+    property int animationLenght: 400
 
-    property bool firstPlacementActive: false
-    property bool cellMoving: false
+    property int globalZ: 0
+
     property bool newCard: false // TODO: předělat na signals&slots
     property int rows: 9
     property int columns: 9
-    property int cellHeight: height / rows
-    property int cellWidth: width / columns
-
-    property string lastDir: "none"
-    property int lastIndex: -1
-
-    property bool canDrop: false
-
-    property bool placeCell: false;
-
-    property int karma: 0
-
-    property bool goodPlace: true
-
+    property int cellHeight: playground.height / rows
+    property int cellWidth: playground.width / columns
 
     id: playground
     anchors.fill: parent
 
-    onKarmaChanged: console.log("karma", karma)
     onNewCardChanged: { // tento slot generuje nové karty do deckModel
         if(deckModel.count == 0) {
             // mark another card as added
-            // potenciálně nekonečná smyčka
+            // TODO potenciálně nekonečná smyčka
             while(true) {
                 var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
-                console.log(randomIndex)
                 if(!dataModel.data[randomIndex].added) {
                     dataModel.data[randomIndex].added = true;
                     dataModel.data[randomIndex].hidden = false;
-                    deckModel.append(dataModel.getItem(randomIndex))
-                    playground.goodPlace = true
+//                    deckModel.append(dataModel.getItem(randomIndex))
                     break;
                 }
                 else {
@@ -52,240 +37,170 @@ Item {
         }
     }
 
-    onCheckChanged: checkPosition();
+//    onCheckChanged: checkPosition();
 
-    // kontrola všech karet ve všech směrech, velké TODO! na refaktoring
-    function checkPosition() {
-        playground.goodPlace = true;
-        if(lastDir === "right") {
-            if(lastIndex == 0) {
-               if(middleDeck.get(0).longitude > rightDeck.get(lastIndex).longitude) {
-                   goodPlace = false;
-               }
+//    // kontrola všech karet ve všech směrech, velké TODO! na refaktoring
+//    function checkPosition() {
+//        playground.goodPlace = true;
+//        if(lastDir === "right") {
+//            if(lastIndex == 0) {
+//               if(middleDeck.get(0).longitude > rightDeck.get(lastIndex).longitude) {
+//                   goodPlace = false;
+//               }
+//            }
+//            else {
+//                if(rightDeck.get(lastIndex - 1).longitude > rightDeck.get(lastIndex).longitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            if(lastIndex < rightDeck.count - 1) {
+//                if(rightDeck.get(lastIndex).longitude > rightDeck.get(lastIndex + 1).longitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            console.log("placement", goodPlace)
+//        }
+//        else if(lastDir === "left") {
+//            if(lastIndex == 0) {
+//               if(middleDeck.get(0).longitude < leftDeck.get(lastIndex).longitude) {
+//                   goodPlace = false;
+//               }
+//            }
+//            else {
+//                if(leftDeck.get(lastIndex - 1).longitude < leftDeck.get(lastIndex).longitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            if(lastIndex < rightDeck.count - 1) {
+//                if(leftDeck.get(lastIndex).longitude < leftDeck.get(lastIndex + 1).longitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            console.log("placement", goodPlace)
+//        }
+//        else if(lastDir === "top") {
+//            if(lastIndex == 0) {
+//               if(middleDeck.get(0).latitude > topDeck.get(lastIndex).latitude) {
+//                   goodPlace = false;
+//               }
+//            }
+//            else {
+//                if(topDeck.get(lastIndex - 1).latitude > topDeck.get(lastIndex).latitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            if(lastIndex < rightDeck.count - 1) {
+//                if(topDeck.get(lastIndex).latitude > topDeck.get(lastIndex + 1).latitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            console.log("placement", goodPlace)
+//        }
+//        else if(lastDir === "bottom") {
+//            if(lastIndex == 0) {
+//               if(middleDeck.get(0).latitude < bottomDeck.get(lastIndex).latitude) {
+//                   goodPlace = false;
+//               }
+//            }
+//            else {
+//                if(bottomDeck.get(lastIndex - 1).latitude < bottomDeck.get(lastIndex).latitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            if(lastIndex < rightDeck.count - 1) {
+//                if(bottomDeck.get(lastIndex).latitude < bottomDeck.get(lastIndex + 1).latitude) {
+//                    goodPlace = false;
+//                }
+//            }
+//            console.log("placement", goodPlace)
+//        }
+//    }
+
+    Canvas {
+        id: canvas
+        z: 0
+        anchors.fill: parent
+        onPaint: {
+            var ctx = getContext("2d");
+
+            for(var i = 1; i < playground.columns; i++) {
+
+                ctx.beginPath();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "gold";
+                ctx.moveTo(i * (canvas.width / playground.columns), 0);
+                ctx.lineTo(i * (canvas.width / playground.columns), canvas.height);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = Qt.rgba(255, 215, 0, 0.4);
+                ctx.moveTo(0, i * (canvas.height / playground.rows));
+                ctx.lineTo(canvas.width, i * (canvas.height / playground.rows));
+                ctx.stroke();
             }
-            else {
-                if(rightDeck.get(lastIndex - 1).longitude > rightDeck.get(lastIndex).longitude) {
-                    goodPlace = false;
-                }
-            }
-            if(lastIndex < rightDeck.count - 1) {
-                if(rightDeck.get(lastIndex).longitude > rightDeck.get(lastIndex + 1).longitude) {
-                    goodPlace = false;
-                }
-            }
-            console.log("placement", goodPlace)
-        }
-        else if(lastDir === "left") {
-            if(lastIndex == 0) {
-               if(middleDeck.get(0).longitude < leftDeck.get(lastIndex).longitude) {
-                   goodPlace = false;
-               }
-            }
-            else {
-                if(leftDeck.get(lastIndex - 1).longitude < leftDeck.get(lastIndex).longitude) {
-                    goodPlace = false;
-                }
-            }
-            if(lastIndex < rightDeck.count - 1) {
-                if(leftDeck.get(lastIndex).longitude < leftDeck.get(lastIndex + 1).longitude) {
-                    goodPlace = false;
-                }
-            }
-            console.log("placement", goodPlace)
-        }
-        else if(lastDir === "top") {
-            if(lastIndex == 0) {
-               if(middleDeck.get(0).latitude > topDeck.get(lastIndex).latitude) {
-                   goodPlace = false;
-               }
-            }
-            else {
-                if(topDeck.get(lastIndex - 1).latitude > topDeck.get(lastIndex).latitude) {
-                    goodPlace = false;
-                }
-            }
-            if(lastIndex < rightDeck.count - 1) {
-                if(topDeck.get(lastIndex).latitude > topDeck.get(lastIndex + 1).latitude) {
-                    goodPlace = false;
-                }
-            }
-            console.log("placement", goodPlace)
-        }
-        else if(lastDir === "bottom") {
-            if(lastIndex == 0) {
-               if(middleDeck.get(0).latitude < bottomDeck.get(lastIndex).latitude) {
-                   goodPlace = false;
-               }
-            }
-            else {
-                if(bottomDeck.get(lastIndex - 1).latitude < bottomDeck.get(lastIndex).latitude) {
-                    goodPlace = false;
-                }
-            }
-            if(lastIndex < rightDeck.count - 1) {
-                if(bottomDeck.get(lastIndex).latitude < bottomDeck.get(lastIndex + 1).latitude) {
-                    goodPlace = false;
-                }
-            }
-            console.log("placement", goodPlace)
         }
     }
 
-    // nalezne první volnou pozici (hidden atribut je true a dosadí tam tu kartu)
-    function setCard(inModel) {
-        for(var index = 0; index < inModel.count; index++) {
-            if(inModel.get(index).hidden) {
-                inModel.set(index, deckModel.get(0));
-                deckModel.clear();
-                break;
-            }
-        }
+    OneDirection {  // north
+        horizontal: false;
+//        dir: "north"
+        x: (playground.columns / 2 | 0) * cellWidth
+        y: 0
     }
 
-    onPlaceCellChanged: {
-        if(lastDir === "right") {
-            setCard(rightDeck);
-        }
-        else if(lastDir === "bottom") {
-            setCard(bottomDeck);
-        }
-        else if(lastDir === "top") {
-            setCard(topDeck);
-        }
-        else if(lastDir === "left") {
-            setCard(leftDeck);
-        }
-        playground.check = !playground.check
-    }
-    ListModel {
-        id: topDeck
+    OneDirection {  // south
+//        dir: "south"
+        horizontal: false;
+        x: (playground.columns / 2 | 0) * cellWidth
+        y: ((playground.rows / 2 | 0) + 1) * cellHeight
     }
 
-    ListModel {
-        id: bottomDeck
+    OneDirection {  // east
+//        dir: "east"
+        horizontal: true;
+        x: ((playground.columns / 2 | 0) + 1) * cellWidth
+        y: (playground.rows / 2 | 0) * cellHeight
     }
 
-    ListModel {
-        id: leftDeck
+    OneDirection {  // west
+//        dir: "east"
+        horizontal: true;
+        x: 0
+        y: (playground.rows / 2 | 0) * cellHeight
     }
 
-    ListModel {
-        id: rightDeck
+    TramStop {
+        width: cellWidth
+        height: cellHeight
     }
 
-    ListModel {
-        id: deckModel
-    }
-    // DECK
-    ListView {
-        property int cells: 1
-
-        id: deckView
-        x: cellWidth
+    TramStop {
+        x: 0
         y: cellHeight
         width: cellWidth
         height: cellHeight
-        interactive: false
-        model: deckModel
-        delegate: TramCell {
-            movable: true
-            onPressedChanged: {
-                firstPlacementActive = pressed;
-                if(!pressed && playground.karma) {
-                    playground.placeCell = !playground.placeCell
-                }
-            }
-        }
-
-        Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            border.width: 1
-            border.color: "#70ff0000"
-        }
     }
+//    ListModel {
+//        id: topDeck
+//    }
 
-    // MIDDLE
-    ListView {
-        property int cells: 1
+//    ListModel {
+//        id: bottomDeck
+//    }
 
-        ListModel {
-            id: middleDeck
+//    ListModel {
+//        id: leftDeck
+//    }
 
-            // náhodné vybrání první karty
-            Component.onCompleted: {
-                var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);//6
-                dataModel.data[randomIndex].added = true;
-                dataModel.data[randomIndex].hidden = false;
-                middleDeck.append(dataModel.data[randomIndex])
-            }
-        }
+//    ListModel {
+//        id: rightDeck
+//    }
 
-        id: middle
-        anchors.centerIn: parent
-        width: parent.width / playground.columns
-        height: parent.height / playground.rows
+//    ListModel {
+//        id: deckModel
+//    }
 
-        interactive: false
-        model: middleDeck
-        delegate: TramCell {}
-    }
 
-    OneDirection {  // TOP
-        id: topDir
-        anchors.top: parent.top
-        anchors.left: middle.left
-        anchors.bottom: middle.top
-        width: parent.width / playground.columns
-
-        dir: "top"
-        layourDir: Qt.LeftToRight
-        layoutOrient: Qt.Vertical
-        cells: (playground.rows - 1) / 2
-        deck: topDeck
-        verticalLayout: ListView.BottomToTop
-    }
-
-    OneDirection {  // BOTTOM
-        id: bottomDir
-        anchors.top: middle.bottom
-        anchors.left: middle.left
-        anchors.bottom: parent.bottom
-        width: parent.width/ playground.columns
-
-        dir: "bottom"
-        layourDir: Qt.LeftToRight
-        layoutOrient: Qt.Vertical
-        cells: (playground.rows - 1) / 2
-        deck: bottomDeck
-    }
-
-    OneDirection {  // LEFT
-        id: leftDir
-        anchors.top: middle.top
-        anchors.right: middle.left
-        anchors.left: parent.left
-        height: parent.height / playground.rows
-
-        dir: "left"
-        layourDir: Qt.RightToLeft
-        layoutOrient: Qt.Horizontal
-        cells: (playground.columns - 1) / 2
-        deck: leftDeck
-    }
-
-    OneDirection {  // RIGHT
-        id: rightDir
-        anchors.top: middle.top
-        anchors.left: middle.right
-        anchors.right: parent.right
-        height: parent.height / playground.rows
-
-        dir: "right"
-        layourDir: Qt.LeftToRight
-        layoutOrient: Qt.Horizontal
-        cells: (playground.columns - 1) / 2
-        deck: rightDeck
-    }
 }
 
