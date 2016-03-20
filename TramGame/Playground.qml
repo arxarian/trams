@@ -5,7 +5,7 @@ import "qrc:/scripts.js" as Scripts
 Item {
 //    property bool check: false
 
-    property int animationLenght: 400
+    property int animationLenght: 600
 
     property int globalZ: 0
 
@@ -15,11 +15,13 @@ Item {
     property int cellHeight: playground.height / rows
     property int cellWidth: playground.width / columns
 
+    property var draggedRect: null
+
     id: playground
     anchors.fill: parent
 
     onNewCardChanged: { // tento slot generuje nové karty do deckModel
-        if(deckModel.count == 0) {
+        if(deckModel.count === 0) {
             // mark another card as added
             // TODO potenciálně nekonečná smyčka
             while(true) {
@@ -144,30 +146,38 @@ Item {
 
     OneDirection {  // north
         horizontal: false;
-//        dir: "north"
+        dir: "north"
         x: (playground.columns / 2 | 0) * cellWidth
         y: 0
+        width: cellWidth
+        height: cellHeight * (playground.columns / 2 | 0)
     }
 
     OneDirection {  // south
-//        dir: "south"
+        dir: "south"
         horizontal: false;
         x: (playground.columns / 2 | 0) * cellWidth
         y: ((playground.rows / 2 | 0) + 1) * cellHeight
+        width: cellWidth
+        height: cellHeight * (playground.columns / 2 | 0)
     }
 
     OneDirection {  // east
-//        dir: "east"
+        dir: "east"
         horizontal: true;
         x: ((playground.columns / 2 | 0) + 1) * cellWidth
         y: (playground.rows / 2 | 0) * cellHeight
+        width: cellWidth * (playground.rows / 2 | 0)
+        height: cellHeight
     }
 
     OneDirection {  // west
-//        dir: "east"
+        dir: "west"
         horizontal: true;
         x: 0
         y: (playground.rows / 2 | 0) * cellHeight
+        width: cellWidth * (playground.rows / 2 | 0)
+        height: cellHeight
     }
 
     TramStop {
@@ -181,26 +191,5 @@ Item {
         width: cellWidth
         height: cellHeight
     }
-//    ListModel {
-//        id: topDeck
-//    }
-
-//    ListModel {
-//        id: bottomDeck
-//    }
-
-//    ListModel {
-//        id: leftDeck
-//    }
-
-//    ListModel {
-//        id: rightDeck
-//    }
-
-//    ListModel {
-//        id: deckModel
-//    }
-
-
 }
 

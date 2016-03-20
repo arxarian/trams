@@ -1,14 +1,15 @@
 import QtQuick 2.0
 
-Item {
+Rectangle {
     id: root
+    color: Qt.rgba(255, 0, 0, 0.5)
 
     Rectangle {
         property bool enableAnimation: true
 
         id: draggedItem
 
-        z: root.z
+//        z: root.z
         x: (root.width - width) / 2
         y: (root.height - height) / 2
         width: root.width * 0.8;
@@ -28,7 +29,9 @@ Item {
             }
             StateChangeScript {
                 script: {
-                    root.z = ++playground.globalZ   // TODO nefunguje
+                    playground.draggedRect = root;
+//                    console.log(root === root)
+//                    root.z = ++playground.globalZ   // TODO nefunguje
                 }
             }
         }
