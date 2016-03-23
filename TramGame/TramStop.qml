@@ -1,6 +1,9 @@
 import QtQuick 2.0
 
 Rectangle {
+    property string sourceDir: "none"
+    property int sourceIndex: 0
+
     id: root
     color: Qt.rgba(255, 0, 0, 0.5)
 
@@ -30,7 +33,11 @@ Rectangle {
             StateChangeScript {
                 script: {
                     playground.draggedRect = root;
-//                    console.log(root === root)
+                    if(draggedItem.Drag.target !== null) {
+                        root.sourceDir = draggedItem.Drag.target.propertyDir;
+                        root.sourceIndex = draggedItem.Drag.target.propertyIndex
+                    }
+
 //                    root.z = ++playground.globalZ   // TODO nefunguje
                 }
             }

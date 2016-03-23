@@ -6,11 +6,11 @@ DropArea {
     property int propertyCount: listModel.count
     property bool canPlace: index < propertyCount - 1
     property bool clearRequest: false
+    property string propertyDir: dir
 
     id: dragTarget
 
     objectName: "dropPlace"
-
 
     Connections {
         target: playground
@@ -19,8 +19,13 @@ DropArea {
 
     onEntered: {
         if(children[1] !== playground.draggedRect && added < 1) {
-            listModel.insert(index, {erasable: true});
-            added++;
+            if(playground.draggedRect.sourceDir !== dir) {
+                listModel.insert(index, {erasable: true});
+                added++;
+            }
+            else {
+                listModel.move(playground.draggedRect.sourceIndex, index, 1);
+            }
         }
     }
 
