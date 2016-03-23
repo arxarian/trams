@@ -15,7 +15,7 @@ Rectangle {
         width: root.width * 0.8;
         height: root.height * 0.8;
 
-        color: "blue"
+        color: Qt.rgba(Math.random(), Math.random(), Math.random(), 1)
 
         Drag.active: mouseArea.drag.active
         Drag.hotSpot.x: width / 2
@@ -57,7 +57,7 @@ Rectangle {
             anchors.fill: parent
             drag.target: draggedItem
             onReleased: {
-                if(draggedItem.Drag.target === null)
+                if(draggedItem.Drag.target === null || !draggedItem.Drag.target.canPlace)
                 {
                     // do nothing
                 }
@@ -75,6 +75,7 @@ Rectangle {
                 }
                 draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
                 draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
+                playground.clearRequest = !playground.clearRequest;
             }
         }
     }

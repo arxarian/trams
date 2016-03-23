@@ -3,9 +3,7 @@ import QtQuick 2.5
 Grid {
     property bool horizontal: false
     property string dir: "none"
-//    property bool newPlace: false
-//    property bool deletePlace: false
-//    property int newPlaceIndex: 0
+    property int added: 0
 
     id: root
     columns: horizontal ? 4 : 1
@@ -14,15 +12,23 @@ Grid {
     layoutDirection: root.dir === "west" ? Qt.RightToLeft : Qt.LeftToRight
     rotation: root.dir === "north" ? 180 : 0
 
-//    onNewPlaceChanged: {
-//        console.log("reparent request from", dir, "index", newPlaceIndex)
-//        var component = Qt.createComponent("DropStop.qml");
-//        if (component.status === Component.Ready) {
-//            component.createObject(parent, {"x": 100, "y": 100});
-//        }
-//        console.log("create, place", newPlaceIndex)
-//        listModel.insert(newPlaceIndex, {erasable: true});
-//    }
+    Connections {
+        target: playground
+        onClearRequestChanged: {
+            for(var i = 0; i < children.length; i++) {
+                if(children[i].objectName === "dropPlace") {
+                    var dropIndex = children[i].propertyIndex;
+//                    console.log("index", dropIndex, listModel.get(dropIndex).erasable, !children[i].containsStop)
+                    if(listModel.get(dropIndex).erasable && !children[i].containsStop) {
+//                        console.log("delete", dropIndex);
+                        listModel.remove(dropIndex);
+                        i--;
+                    }
+
+                }
+            }
+        }
+    }
 
     ListModel {
         id: listModel

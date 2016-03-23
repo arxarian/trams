@@ -10,12 +10,14 @@ Item {
     property int globalZ: 0
 
     property bool newCard: false // TODO: předělat na signals&slots
-    property int rows: 9
-    property int columns: 9
+    property int rows: 18
+    property int columns: 18
     property int cellHeight: playground.height / rows
     property int cellWidth: playground.width / columns
 
     property var draggedRect: null
+
+    property bool clearRequest: false
 
     id: playground
     anchors.fill: parent
@@ -188,6 +190,13 @@ Item {
     TramStop {
         x: 0
         y: cellHeight
+        width: cellWidth
+        height: cellHeight
+    }
+
+    TramStop {
+        x: 0
+        y: cellHeight * 2
         width: cellWidth
         height: cellHeight
     }
