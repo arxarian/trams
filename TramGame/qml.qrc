@@ -7,5 +7,6 @@
         <file>DropStop.qml</file>
         <file>TramStop.qml</file>
         <file>OneDirection.qml</file>
+        <file>CatchMe.qml</file>
     </qresource>
 </RCC>

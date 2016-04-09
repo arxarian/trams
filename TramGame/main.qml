@@ -7,8 +7,8 @@ Window {
     id: globalRoot
 
     visible: true
-    width: 900
-    height: 900
+    width: 550
+    height: 550
     color: "black"
 
 //    Item {
@@ -43,10 +43,15 @@ Window {
 //        }
 //    }
 
-    Playground {
-        id: playground
-        anchors.fill: parent
+    CatchMe {
     }
+
+//****************
+//    Playground {
+//        id: playground
+//        anchors.fill: parent
+//    }
+//****************
 
 //    Rectangle {
 //        width: 100
