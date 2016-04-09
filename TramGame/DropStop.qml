@@ -18,6 +18,7 @@ DropArea {
     }
 
     onEntered: {
+        console.log("entered", index)
         if(children[1] !== playground.draggedRect && added < 1/* && playground.lastDir != propertyDir*/) {
             if(playground.draggedRect.sourceDir !== dir && canPlace) {
                 console.log("creating", index)
