@@ -14,25 +14,30 @@ DropArea {
 
     Connections {
         target: playground
-        onClearRequestChanged:  added = 0;
+        onClearRequestChanged: added = 0;
     }
 
     onEntered: {
-        if(children[1] !== playground.draggedRect && added < 1) {
-            if(playground.draggedRect.sourceDir !== dir) {
-                listModel.insert(index, {erasable: true});
+        if(children[1] !== playground.draggedRect && added < 1/* && playground.lastDir != propertyDir*/) {
+            if(playground.draggedRect.sourceDir !== dir && canPlace) {
+                console.log("creating", index)
+                listModel.insert(index, {/*erasable: true*/});
                 added++;
+//                playground.lastDir = propertyDir;
             }
-            else {
+            else if(canPlace) {
                 listModel.move(playground.draggedRect.sourceIndex, index, 1);
             }
         }
     }
 
     onExited: {
-        if(!containsStop && erasable) {
+//        console.log(propertyIndex, propertyDir, !containsStop, erasable, !containsStop && erasable)
+        if(!containsStop && canPlace) {
+            console.log("deleting", index)
             added--;
             listModel.remove(index);
+//            playground.clearRequest = !playground.clearRequest;
         }
     }
 
@@ -56,7 +61,7 @@ DropArea {
                 when: dragTarget.containsDrag && !containsStop
                 PropertyChanges {
                     target: dropRectangle
-                    color: "grey"
+                    color: "grey"//canPlace ? "grey" : "green"
                 }
             }
         ]

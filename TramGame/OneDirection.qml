@@ -19,14 +19,14 @@ Grid {
                 if(children[i].objectName === "dropPlace") {
                     var dropIndex = children[i].propertyIndex;
 //                    console.log("index", dropIndex, listModel.get(dropIndex).erasable, !children[i].containsStop)
-                    if(listModel.get(dropIndex).erasable && !children[i].containsStop) {
+                    if(/*listModel.get(dropIndex).erasable && */!children[i].containsStop) {
 //                        console.log("delete", dropIndex);
                         listModel.remove(dropIndex);
                         i--;
                     }
-
                 }
             }
+            listModel.append({});
         }
     }
 

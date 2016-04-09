@@ -8,6 +8,7 @@ Rectangle {
     color: Qt.rgba(255, 0, 0, 0.5)
 
     Rectangle {
+
         property bool enableAnimation: true
 
         id: draggedItem
@@ -33,6 +34,7 @@ Rectangle {
             StateChangeScript {
                 script: {
                     playground.draggedRect = root;
+//                    playground.lastDir = "none";
                     if(draggedItem.Drag.target !== null) {
                         root.sourceDir = draggedItem.Drag.target.propertyDir;
                         root.sourceIndex = draggedItem.Drag.target.propertyIndex
@@ -64,7 +66,7 @@ Rectangle {
             anchors.fill: parent
             drag.target: draggedItem
             onReleased: {
-                if(draggedItem.Drag.target === null || !draggedItem.Drag.target.canPlace)
+                if(draggedItem.Drag.target === null/* || !draggedItem.Drag.target.canPlace*/)
                 {
                     // do nothing
                 }

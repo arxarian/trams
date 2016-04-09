@@ -5,19 +5,20 @@ import "qrc:/scripts.js" as Scripts
 Item {
 //    property bool check: false
 
-    property int animationLenght: 600
+    property int animationLenght: 1200
 
     property int globalZ: 0
 
     property bool newCard: false // TODO: předělat na signals&slots
-    property int rows: 18
-    property int columns: 18
+    property int rows: 11
+    property int columns: 11
     property int cellHeight: playground.height / rows
     property int cellWidth: playground.width / columns
 
     property var draggedRect: null
 
     property bool clearRequest: false
+//    property string lastDir: "none"
 
     id: playground
     anchors.fill: parent
