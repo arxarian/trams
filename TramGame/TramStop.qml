@@ -8,14 +8,17 @@ Rectangle {
     color: Qt.rgba(255, 0, 0, 0.5)
 
     Rectangle {
+        function restoreBinding() {
+            draggedItem.x = Qt.binding(function() {return (root.x + (root.width - width) / 2)})
+            draggedItem.y = Qt.binding(function() {return (root.y + (root.height - height) / 2)})
+        }
 
         property bool enableAnimation: true
 
         id: draggedItem
 
+        parent: root.parent
 //        z: root.z
-        x: (root.width - width) / 2
-        y: (root.height - height) / 2
         width: root.width * 0.8;
         height: root.height * 0.8;
 
@@ -25,12 +28,14 @@ Rectangle {
         Drag.hotSpot.x: width / 2
         Drag.hotSpot.y: height / 2
 
+        Component.onCompleted: restoreBinding();
+
         states: State {
             when: mouseArea.drag.active
-            ParentChange {
-                target: draggedItem;
-                parent: root
-            }
+//            ParentChange {
+//                target: draggedItem;
+//                parent: root
+//            }
             StateChangeScript {
                 script: {
                     playground.draggedRect = root;
@@ -68,22 +73,24 @@ Rectangle {
             onReleased: {
                 if(draggedItem.Drag.target === null/* || !draggedItem.Drag.target.canPlace*/)
                 {
+                    draggedItem.restoreBinding();
                     // do nothing
                 }
                 else if(!draggedItem.Drag.target.containsStop) {
-                    var dropPos = playground.mapFromItem(draggedItem.Drag.target);
-                    var dragPos = playground.mapFromItem(draggedItem)
+//                    var dropPos = playground.mapFromItem(draggedItem.Drag.target);
+//                    var dragPos = playground.mapFromItem(draggedItem)
 
-                    root.x = root.y = 0;
-                    root.parent = draggedItem.Drag.target   // reparentuje mouseareu
+//                    root.x = root.y = 0;
+//                    root.parent = draggedItem.Drag.target   // reparentuje mouseareu
 
-                    draggedItem.enableAnimation = false
-                    draggedItem.x = dragPos.x - dropPos.x;
-                    draggedItem.y = dragPos.y - dropPos.y;
-                    draggedItem.enableAnimation = true
+//                    draggedItem.restoreBinding();
+//                    draggedItem.enableAnimation = false
+//                    draggedItem.x = dragPos.x - dropPos.x;
+//                    draggedItem.y = dragPos.y - dropPos.y;
+//                    draggedItem.enableAnimation = true
                 }
-                draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
-                draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
+//                draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
+//                draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
                 playground.clearRequest = !playground.clearRequest;
             }
         }

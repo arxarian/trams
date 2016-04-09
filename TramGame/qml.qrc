@@ -8,5 +8,6 @@
         <file>TramStop.qml</file>
         <file>OneDirection.qml</file>
         <file>CatchMe.qml</file>
+        <file>Catching.qml</file>
     </qresource>
 </RCC>

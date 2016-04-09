@@ -2,8 +2,6 @@ import QtQuick 2.5
 
 Rectangle { // tento je hýbán časovačem
     id: item
-    width: 50
-    height: 50
     color: "gold"
 
     Rectangle { // tento chytnu
@@ -37,8 +35,8 @@ Rectangle { // tento je hýbán časovačem
                 console.log("broken");
             }
             else {
-                restoreBinding();
-                console.log("restored");
+//                restoreBinding();
+//                console.log("restored");
             }
         }
 
@@ -49,16 +47,24 @@ Rectangle { // tento je hýbán časovačem
             width: item.width
             height: item.height
             drag.target: draggedItem
+            onReleased: {
+                if(draggedItem.Drag.target !== null) {
+                    // coordinates
+//                    console.log()
+                    item.parent = draggedItem.Drag.target;
+//                    draggedItem.restoreBinding();
+                }
+            }
         }
     }
-    Timer {
-        interval: 1500
-        repeat: true
-        running: true
-        onTriggered: {
-            console.log("triggered")
-            item.x = Math.random() * globalRoot.width
-            item.y = Math.random() * globalRoot.height
-        }
-    }
+//    Timer {
+//        interval: 1500
+//        repeat: true
+//        running: true
+//        onTriggered: {
+//            console.log("triggered")
+//            item.x = Math.random() * globalRoot.width
+//            item.y = Math.random() * globalRoot.height
+//        }
+//    }
 }
