@@ -88,6 +88,7 @@ Rectangle {
                     draggedItem.y = dragPos.y - dropPos.y;
                     draggedItem.enableAnimation = true
                 }
+                globalTramStop.visible = false  // TODO - pri pusteni zastavky se zastavka (TramStop) skryje pod komponentu OneDirection
                 draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
                 draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
                 playground.clearRequest = !playground.clearRequest;
