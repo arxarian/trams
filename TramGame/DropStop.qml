@@ -27,6 +27,7 @@ DropArea {
 //                playground.lastDir = propertyDir;
             }
             else if(canPlace) {
+                console.log("moving");
                 listModel.move(playground.draggedRect.sourceIndex, index, 1);
             }
         }
@@ -46,7 +47,7 @@ DropArea {
         id: dropRectangle
 
         anchors.fill: parent
-        color: Qt.rgba(255, 0, 0, 0.2)
+        color: "skyblue"//Qt.rgba(255, 0, 0, 0.2)
         border.width: 1
         border.color: "gold"
 
@@ -59,7 +60,7 @@ DropArea {
 
         states: [
             State {
-                when: dragTarget.containsDrag && !containsStop
+                when: dragTarget.containsDrag && !containsStop && playground.draggedRect.sourceDir !== dir
                 PropertyChanges {
                     target: dropRectangle
                     color: "grey"//canPlace ? "grey" : "green"

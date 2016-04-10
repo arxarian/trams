@@ -75,8 +75,11 @@ Rectangle {
                 if(draggedItem.Drag.target === null/* || !draggedItem.Drag.target.canPlace*/)
                 {
                     // do nothing
+                    console.log("do nothing")
                 }
-                else if(!draggedItem.Drag.target.containsStop) {
+                else if(!draggedItem.Drag.target.containsStop && playground.draggedRect.sourceDir !== draggedItem.Drag.target.propertyDir) {
+
+                    console.log("new position")
                     var dropPos = playground.mapFromItem(draggedItem.Drag.target);
                     var dragPos = playground.mapFromItem(draggedItem)
 
@@ -88,7 +91,10 @@ Rectangle {
                     draggedItem.y = dragPos.y - dropPos.y;
                     draggedItem.enableAnimation = true
                 }
-                globalTramStop.visible = false  // TODO - pri pusteni zastavky se zastavka (TramStop) skryje pod komponentu OneDirection
+                if(draggedItem.Drag.target !== null && playground.draggedRect.sourceDir !== draggedItem.Drag.target.propertyDir)
+                {
+                    globalTramStop.visible = false  // TODO - pri pusteni zastavky se zastavka (TramStop) skryje pod komponentu OneDirection
+                }
                 draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
                 draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
                 playground.clearRequest = !playground.clearRequest;
