@@ -3,6 +3,7 @@ import QtQuick 2.0
 Rectangle {
     property string sourceDir: "none"
     property int sourceIndex: -1
+    property alias cellColor: draggedItem.color
 
     id: root
     color: Qt.rgba(255, 0, 0, 0.5)
@@ -38,7 +39,13 @@ Rectangle {
                     if(draggedItem.Drag.target !== null) {
                         root.sourceDir = draggedItem.Drag.target.propertyDir;
                         root.sourceIndex = draggedItem.Drag.target.propertyIndex;
-                        draggedItem.Drag.target.z = ++playground.globalZ;
+
+                        // umístění obdelníku nad obdelník draggedItem tak, aby se neskrýval pod komponenty OneDirection (řeší z-index)
+                        var positionOffset = root.mapToItem(playground);
+                        globalTramStop.x = Qt.binding(function() {return positionOffset.x + draggedItem.x})
+                        globalTramStop.y = Qt.binding(function() {return positionOffset.y + draggedItem.y})
+                        globalTramStop.color = draggedItem.color
+                        globalTramStop.visible = true
                     }
                 }
             }

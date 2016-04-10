@@ -7,8 +7,6 @@ Item {
 
     property int animationLenght: 1200
 
-    property int globalZ: 0
-
     property bool newCard: false // TODO: předělat na signals&slots
     property int rows: 11
     property int columns: 11
@@ -183,9 +181,11 @@ Item {
         height: cellHeight
     }
 
-    TramStop {
-        width: cellWidth
-        height: cellHeight
+    Rectangle {
+        id: globalTramStop
+        visible: false
+        width: cellWidth * 0.8  // TODO - navázat konstantu 0.8 na rozměry TramStop
+        height: cellHeight * 0.8// TODO - navázat konstantu 0.8 na rozměry TramStop
     }
 
     TramStop {
