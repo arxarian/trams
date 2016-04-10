@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
     property string sourceDir: "none"
-    property int sourceIndex: 0
+    property int sourceIndex: -1
 
     id: root
     color: Qt.rgba(255, 0, 0, 0.5)
@@ -13,7 +13,6 @@ Rectangle {
 
         id: draggedItem
 
-//        z: root.z
         x: (root.width - width) / 2
         y: (root.height - height) / 2
         width: root.width * 0.8;
@@ -31,16 +30,16 @@ Rectangle {
                 target: draggedItem;
                 parent: root
             }
+
             StateChangeScript {
                 script: {
                     playground.draggedRect = root;
 //                    playground.lastDir = "none";
                     if(draggedItem.Drag.target !== null) {
                         root.sourceDir = draggedItem.Drag.target.propertyDir;
-                        root.sourceIndex = draggedItem.Drag.target.propertyIndex
+                        root.sourceIndex = draggedItem.Drag.target.propertyIndex;
+                        draggedItem.Drag.target.z = ++playground.globalZ;
                     }
-
-//                    root.z = ++playground.globalZ   // TODO nefunguje
                 }
             }
         }
@@ -85,6 +84,9 @@ Rectangle {
                 draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
                 draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
                 playground.clearRequest = !playground.clearRequest;
+
+                root.sourceDir = "none";
+                root.sourceIndex = -1
             }
         }
     }
