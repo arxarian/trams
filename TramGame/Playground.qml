@@ -17,6 +17,7 @@ Item {
 
     property bool clearRequest: false
 //    property string lastDir: "none"
+//    property string propertyDir: "nodir"
 
     id: playground
     anchors.fill: parent
