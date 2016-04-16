@@ -6,8 +6,8 @@ Grid {
     property int added: 0
 
     id: root
-    columns: horizontal ? 4 : 1
-    rows: horizontal ? 1 : 4
+    columns: horizontal ? playground.columns / 2 : 1
+    rows: horizontal ? 1 : playground.rows / 2
 
     layoutDirection: root.dir === "west" ? Qt.RightToLeft : Qt.LeftToRight
     rotation: root.dir === "north" ? 180 : 0
