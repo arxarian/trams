@@ -45,4 +45,8 @@ Grid {
             rotation: root.dir === "north" ? 180 : 0
         }
     }
+
+    move: Transition {
+           NumberAnimation { properties: "x,y"; duration: animationLenght / 5}
+    }
 }
