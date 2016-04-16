@@ -8,8 +8,8 @@ Item {
     property int animationLenght: 1200
 
     property bool newCard: false // TODO: předělat na signals&slots
-    property int rows: 11
-    property int columns: 11
+    property int rows: 17
+    property int columns: 17
     property int cellHeight: playground.height / rows
     property int cellWidth: playground.width / columns
 
@@ -23,22 +23,24 @@ Item {
     anchors.fill: parent
 
     onNewCardChanged: { // tento slot generuje nové karty do deckModel
-        if(deckModel.count === 0) {
-            // mark another card as added
-            // TODO potenciálně nekonečná smyčka
-            while(true) {
-                var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
-                if(!dataModel.data[randomIndex].added) {
-                    dataModel.data[randomIndex].added = true;
-                    dataModel.data[randomIndex].hidden = false;
-//                    deckModel.append(dataModel.getItem(randomIndex))
-                    break;
-                }
-                else {
-                    console.log("conflict detected")
-                }
-            }
-        }
+        var component = Qt.createComponent("TramStop.qml");
+        var sprite = component.createObject(playground, {"width": cellWidth, "height": cellHeight});
+//        if(deckModel.count === 0) {
+//            // mark another card as added
+//            // TODO potenciálně nekonečná smyčka
+//            while(true) {
+//                var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
+//                if(!dataModel.data[randomIndex].added) {
+//                    dataModel.data[randomIndex].added = true;
+//                    dataModel.data[randomIndex].hidden = false;
+////                    deckModel.append(dataModel.getItem(randomIndex))
+//                    break;
+//                }
+//                else {
+//                    console.log("conflict detected")
+//                }
+//            }
+//        }
     }
 
 //    onCheckChanged: checkPosition();

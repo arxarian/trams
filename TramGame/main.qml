@@ -7,8 +7,8 @@ Window {
     id: globalRoot
 
     visible: true
-    width: 550
-    height: 550
+    width: 850
+    height: 850
     color: "black"
 
 //    Item {
@@ -48,21 +48,21 @@ Window {
         anchors.fill: parent
     }
 
-//    Rectangle {
-//        width: 100
-//        height: 100
-//        anchors.bottom: parent.bottom
-//        color: "silver"
-//        Text {
-//            anchors.centerIn: parent
-//            text: "new card"
-//        }
+    Rectangle {
+        width: playground.cellWidth
+        height: playground.cellHeight
+        anchors.bottom: parent.bottom
+        color: "silver"
+        Text {
+            anchors.centerIn: parent
+            text: "new card"
+        }
 
-//        MouseArea {
-//            anchors.fill: parent
-//            onClicked: playground.newCard = !playground.newCard
-//        }
-//    }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: playground.newCard = !playground.newCard
+        }
+    }
 
 //    Rectangle {
 //        width: 100
