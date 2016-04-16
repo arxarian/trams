@@ -182,12 +182,12 @@ Item {
         height: cellHeight
     }
 
-    Rectangle {
-        id: globalTramStop
-        visible: false
-        width: cellWidth * 0.8  // TODO - navázat konstantu 0.8 na rozměry TramStop
-        height: cellHeight * 0.8// TODO - navázat konstantu 0.8 na rozměry TramStop
-    }
+//    Rectangle {
+//        id: globalTramStop
+//        visible: false
+//        width: cellWidth * 0.8  // TODO - navázat konstantu 0.8 na rozměry TramStop
+//        height: cellHeight * 0.8// TODO - navázat konstantu 0.8 na rozměry TramStop
+//    }
 
     TramStop {
         x: 0

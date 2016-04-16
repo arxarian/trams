@@ -42,10 +42,10 @@ Rectangle {
 
                         // umístění obdelníku nad obdelník draggedItem tak, aby se neskrýval pod komponenty OneDirection (řeší z-index)
                         var positionOffset = root.mapToItem(playground);
-                        globalTramStop.x = Qt.binding(function() {return positionOffset.x + draggedItem.x})
-                        globalTramStop.y = Qt.binding(function() {return positionOffset.y + draggedItem.y})
-                        globalTramStop.color = draggedItem.color
-                        globalTramStop.visible = true
+//                        globalTramStop.x = Qt.binding(function() {return positionOffset.x + draggedItem.x})
+//                        globalTramStop.y = Qt.binding(function() {return positionOffset.y + draggedItem.y})
+//                        globalTramStop.color = draggedItem.color
+//                        globalTramStop.visible = true
                     }
                 }
             }
