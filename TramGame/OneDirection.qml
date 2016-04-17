@@ -9,8 +9,11 @@ Grid {
     columns: horizontal ? playground.columns / 2 : 1
     rows: horizontal ? 1 : playground.rows / 2
 
-    layoutDirection: root.dir === "west" ? Qt.RightToLeft : Qt.LeftToRight
-    rotation: root.dir === "north" ? 180 : 0
+    rotation: {
+        if(root.dir === "north") return 180;
+        else if(root.dir === "west") return 180;
+        else return 0;
+    }
 
     Connections {
         target: playground
@@ -42,7 +45,10 @@ Grid {
         delegate: DropStop {
             width: cellWidth
             height: cellHeight
-            rotation: root.dir === "north" ? 180 : 0
+            rotation: {if(root.dir === "north") return 180;
+                else if(root.dir === "west") return 180;
+                else return 0;
+            }
         }
     }
 
