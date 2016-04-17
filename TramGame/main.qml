@@ -11,38 +11,6 @@ Window {
     height: 850
     color: "black"
 
-//    Item {
-//        width: 200; height: 200
-
-//        DropArea {
-//            x: 75; y: 75
-//            width: 50; height: 50
-
-//            Rectangle {
-//                anchors.fill: parent
-//                color: (parent.containsDrag || containsStop) ? "green" : "gold"
-
-//                Behavior on color {ColorAnimation{duration: 200}}
-//            }
-//        }
-
-//        Rectangle {
-//            x: 10; y: 10
-//            width: 40; height: 40
-//            color: "red"
-
-//            Drag.active: dragArea.drag.active
-//            Drag.hotSpot.x: width/2
-//            Drag.hotSpot.y: height/2
-
-//            MouseArea {
-//                id: dragArea
-//                anchors.fill: parent
-//                drag.target: parent
-//            }
-//        }
-//    }
-
     Playground {
         id: playground
         anchors.fill: parent
