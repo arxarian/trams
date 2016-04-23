@@ -30,7 +30,7 @@ Grid {
             }
             listModel.append({});
         }
-        onCheckChanged: {
+        onCheckChanged: {   // NOTE - možná se tahle šílenost nemusí provádět zde
 //            console.log("checking", dir)
             // TODO - compare all or only the new one?
 //            var theLastInnerChildren = -1;
@@ -87,6 +87,7 @@ Grid {
         id: listModel
         ListElement {
             // the first DropStop for TramStop
+            noWarningRole: true // when deleted, the warning "All ListElement declarations are empty" is set
         }
     }
 

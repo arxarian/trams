@@ -3,24 +3,24 @@ import QtQml.Models 2.2
 import "qrc:/scripts.js" as Scripts
 
 Item {
-    property int animationLenght: 1200
+    property int animationLenght: 1200                  // referenční délka animací
 
-    property bool newCard: false // TODO: předělat na signals&slots
-    property bool check: false   // TODO - to samé jako new card
-    property bool makeStopsNonDraggable: true
+    property bool newCard: false                        // požadavek na generování nové zastávky
+    property bool check: false                          // požadavek na kontrolu pozic zastávek (OneDirection)
+    property bool makeStopsNonDraggable: true           // požadavek pro označení zastávky jako netahatelné (TramStop)
 
-    property int rows: 17
-    property int columns: 17
-    property int cellHeight: playground.height / rows
-    property int cellWidth: playground.width / columns
+    property int rows: 17                               // počet zastávek v šířce (N)
+    property int columns: 17                            // počet zastávek v délce (E)
+    property int cellHeight: playground.height / rows   // výška zastávky
+    property int cellWidth: playground.width / columns  // šířka zastávky
 
     property var draggedRect: null
 
-    property bool clearRequest: false
-    property bool theFirstDrag: true
+    property bool clearRequest: false                   // požadavek pro smazání prázdných dropStops (OneDirection)
+    property bool theFirstDrag: true                    // ?
 
-    property real longitude: 0
-    property real latitude: 0
+    property real longitude: 0                          // zeměpisná délka (E) výchozí zastávky
+    property real latitude: 0                           // zeměpisná šířka (N) výchozí zastávky
 
     id: playground
     anchors.fill: parent
