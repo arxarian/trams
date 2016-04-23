@@ -9,6 +9,22 @@ var rightDir = []
 var topDir = []
 var bottomDir = []
 
+function checkCoordinates(dir, firstCoordinate, secondCoordinate) {
+//    console.log(firstCoordinate, secondCoordinate)
+    if(dir === "north") {
+        return firstCoordinate <= secondCoordinate;
+    }
+    if(dir === "south") {
+        return firstCoordinate >= secondCoordinate;
+    }
+    if(dir === "east") {
+        return firstCoordinate <= secondCoordinate;
+    }
+    if(dir === "west") {
+        return firstCoordinate >= secondCoordinate;
+    }
+}
+
 function canRemove(inModel) {
     var count = 0;
     for(var nIndex = 0; nIndex < inModel.count; nIndex++) {

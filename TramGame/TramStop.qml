@@ -3,9 +3,13 @@ import QtQuick 2.5
 Rectangle {
     property string sourceDir: "none"
     property int sourceIndex: -1
+    property int modelIndex: -1     // TODO - bylo by lepší udělat komponentu, co by přímo byla součást modelu (a ne to vázat přes proměnnou)
 
     id: root
-    color: Qt.rgba(255, 0, 0, 0.5)
+
+    objectName: "tramStop"
+
+    color: Qt.rgba(255, 0, 0, 0)
 
     Rectangle {
         property bool enableAnimation: true
@@ -45,6 +49,16 @@ Rectangle {
                 }
             }
         }
+
+        Text {
+            id: text
+            anchors.fill: parent
+            color: "white"
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            text: modelIndex === -1 ? "" : dataModel.data[modelIndex].name
+         }
 
         Behavior on x {
             enabled: draggedItem.enableAnimation;
