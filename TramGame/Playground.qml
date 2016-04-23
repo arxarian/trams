@@ -16,8 +16,7 @@ Item {
     property var draggedRect: null
 
     property bool clearRequest: false
-//    property string lastDir: "none"
-//    property string propertyDir: "nodir"
+    property bool theFirstDrag: true
 
     id: playground
     anchors.fill: parent
@@ -184,6 +183,7 @@ Item {
         height: cellHeight
     }
 
+    // NOTE - tato komponeta řeší problém se překrýváním právě umisťované kartičky
 //    Rectangle {
 //        id: globalTramStop
 //        visible: false

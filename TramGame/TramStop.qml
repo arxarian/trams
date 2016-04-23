@@ -1,15 +1,13 @@
-import QtQuick 2.0
+import QtQuick 2.5
 
 Rectangle {
     property string sourceDir: "none"
     property int sourceIndex: -1
-    property alias cellColor: draggedItem.color
 
     id: root
     color: Qt.rgba(255, 0, 0, 0.5)
 
     Rectangle {
-
         property bool enableAnimation: true
 
         id: draggedItem
@@ -35,11 +33,8 @@ Rectangle {
             StateChangeScript {
                 script: {
                     playground.draggedRect = root;
-//                    playground.lastDir = "none";
                     if(draggedItem.Drag.target !== null) {
-                        root.sourceDir = draggedItem.Drag.target.propertyDir;
                         root.sourceIndex = draggedItem.Drag.target.propertyIndex;
-
                         // umístění obdelníku nad obdelník draggedItem tak, aby se neskrýval pod komponenty OneDirection (řeší z-index)
                         var positionOffset = root.mapToItem(playground);
 //                        globalTramStop.x = Qt.binding(function() {return positionOffset.x + draggedItem.x})
@@ -95,12 +90,16 @@ Rectangle {
 //                {
 //                    globalTramStop.visible = false  // TODO - pri pusteni zastavky se zastavka (TramStop) skryje pod komponentu OneDirection
 //                }
-                draggedItem.x = (root.width - width) / 2//Qt.binding(function() {return (mouseArea.width - tile.width) / 2});
-                draggedItem.y = (root.height - height) / 2//Qt.binding(function() {return (mouseArea.height - tile.height) / 2});
+                draggedItem.x = (root.width - width) / 2;
+                draggedItem.y = (root.height - height) / 2;
                 playground.clearRequest = !playground.clearRequest;
 
-                root.sourceDir = "none";
-                root.sourceIndex = -1
+                // pokud byla zastávka položena do některého směru, urči, který směr to je
+                if(draggedItem.Drag.target !== null) {
+                    root.sourceDir = draggedItem.Drag.target.propertyDir;
+                    root.sourceIndex = draggedItem.Drag.target.propertyIndex;
+                }
+                playground.theFirstDrag = true;
             }
         }
     }

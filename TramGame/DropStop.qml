@@ -19,18 +19,23 @@ DropArea {
 
     onEntered: {
         console.log("entered", index)
-        if(children[1] !== playground.draggedRect && added < 1/* && playground.lastDir != propertyDir*/) {
-            if(playground.draggedRect.sourceDir !== dir && canPlace) {
-                console.log("creating", index)
-                listModel.insert(index, {/*erasable: true*/});
-                added++;
-//                playground.lastDir = propertyDir;
-            }
-            else if(canPlace) {
-                console.log("moving");
-                listModel.move(playground.draggedRect.sourceIndex, index, 1);
+        if(children[1] !== playground.draggedRect && added < 1) {
+            console.log("lol", playground.draggedRect.sourceDir, dir)
+            if(!playground.theFirstDrag)
+            {
+                if(playground.draggedRect.sourceDir !== dir && canPlace) {
+                    console.log("creating", index)
+                    listModel.insert(index, {});
+                    added++;
+                }
+                else if(canPlace && playground.draggedRect.sourceIndex !== index) {
+                    var tempIndex = index;
+                    listModel.move(playground.draggedRect.sourceIndex, index, 1);
+                    playground.draggedRect.sourceIndex = tempIndex;
+                }
             }
         }
+        playground.theFirstDrag = false;
     }
 
     onExited: {
