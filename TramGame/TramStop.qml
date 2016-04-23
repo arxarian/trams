@@ -121,7 +121,7 @@ Rectangle {
                     root.sourceDir = draggedItem.Drag.target.propertyDir;
                     root.sourceIndex = draggedItem.Drag.target.propertyIndex;
                 }
-                playground.theFirstDrag = true;
+//                playground.theFirstDrag = true;
             }
         }
     }

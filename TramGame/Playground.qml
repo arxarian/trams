@@ -17,7 +17,7 @@ Item {
     property var draggedRect: null
 
     property bool clearRequest: false                   // požadavek pro smazání prázdných dropStops (OneDirection)
-    property bool theFirstDrag: true                    // ?
+//    property bool theFirstDrag: true                    // ?
 
     property real longitude: 0                          // zeměpisná délka (E) výchozí zastávky
     property real latitude: 0                           // zeměpisná šířka (N) výchozí zastávky
