@@ -3,12 +3,12 @@ import QtQml.Models 2.2
 import "qrc:/scripts.js" as Scripts
 
 Item {
-//    property bool check: false
-
     property int animationLenght: 1200
 
     property bool newCard: false // TODO: předělat na signals&slots
     property bool check: false   // TODO - to samé jako new card
+    property bool makeStopsNonDraggable: true
+
     property int rows: 17
     property int columns: 17
     property int cellHeight: playground.height / rows
@@ -26,32 +26,36 @@ Item {
     anchors.fill: parent
 
     onNewCardChanged: { // tento slot generuje nové karty do deckModel
-        var stop = createNewStop();
+        var nTrampStops = 0;
+        for(var nChildIndex = 0; nChildIndex < children.length; nChildIndex++) {
+            if(children[nChildIndex].objectName === "tramStop") {
+                nTrampStops++;
+            }
+        }
+        if(nTrampStops < 2) {   // NOTE - the first tramStop is the starting tramStop
+            // mark all stops as non dragable
+            makeStopsNonDraggable = !makeStopsNonDraggable;
+            var stop = createNewStop();
+        }
     }
 
     function createNewStop() {
         var component = Qt.createComponent("TramStop.qml");
-
+        if(component.status !== Component.Ready) console.log("TramStop.qml creation error");
         var sprite = component.createObject(playground, {"width": cellWidth, "height": cellHeight});
-//        if(deckModel.count === 0) {
-//            // mark another card as added
-//            // TODO potenciálně nekonečná smyčka
-            while(true) {
-                var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
-
-//                console.log("name", dataModel.data[randomIndex].name)
-
-                if(!dataModel.data[randomIndex].added) {
-                    dataModel.data[randomIndex].added = true;
-//                    dataModel.data[randomIndex].hidden = false;
-                    sprite.modelIndex = randomIndex;
-                    return sprite;
-                }
-                else {
-                    console.log("conflict detected")
-                }
+        // mark another card as added
+        // TODO potenciálně nekonečná smyčka
+        while(true) {
+            var randomIndex = (Math.random() * dataModel.data.length).toFixed(0);
+            if(!dataModel.data[randomIndex].added) {
+                dataModel.data[randomIndex].added = true;
+                sprite.modelIndex = randomIndex;
+                return sprite;
             }
-//        }
+            else {
+                console.log("conflict detected")
+            }
+        }
     }
 
     Component.onCompleted: {
@@ -67,6 +71,7 @@ Item {
         onTriggered: {
             var newStop = createNewStop();
             newStop.anchors.centerIn = parent;
+            newStop.canBeDrag = false
             longitude = dataModel.data[newStop.modelIndex].longitude
             latitude = dataModel.data[newStop.modelIndex].latitude
         }

@@ -4,12 +4,20 @@ Rectangle {
     property string sourceDir: "none"
     property int sourceIndex: -1
     property int modelIndex: -1     // TODO - bylo by lepší udělat komponentu, co by přímo byla součást modelu (a ne to vázat přes proměnnou)
+    property bool canBeDrag: true
 
     id: root
 
     objectName: "tramStop"
 
     color: Qt.rgba(255, 0, 0, 0)
+
+    Connections {
+        target: playground
+        onMakeStopsNonDraggableChanged: {
+            canBeDrag = false;
+        }
+    }
 
     Rectangle {
         property bool enableAnimation: true
@@ -79,7 +87,7 @@ Rectangle {
             id: mouseArea
 
             anchors.fill: parent
-            drag.target: draggedItem
+            drag.target: canBeDrag ? draggedItem : null
             onReleased: {
                 if(draggedItem.Drag.target === null/* || !draggedItem.Drag.target.canPlace*/)
                 {
