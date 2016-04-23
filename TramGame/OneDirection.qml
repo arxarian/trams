@@ -22,9 +22,7 @@ Grid {
             for(var i = 0; i < children.length; i++) {
                 if(children[i].objectName === "dropPlace") {
                     var dropIndex = children[i].propertyIndex;
-//                    console.log("index", dropIndex, listModel.get(dropIndex).erasable, !children[i].containsStop)
-                    if(/*listModel.get(dropIndex).erasable && */!children[i].containsStop) {
-//                        console.log("delete", dropIndex);
+                    if(!children[i].containsStop) {
                         listModel.remove(dropIndex);
                         i--;
                     }
@@ -88,7 +86,7 @@ Grid {
     ListModel {
         id: listModel
         ListElement {
-            erasable: false // TODO - asi se nepoužívá
+            // the first DropStop for TramStop
         }
     }
 

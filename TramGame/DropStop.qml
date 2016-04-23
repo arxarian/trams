@@ -4,7 +4,7 @@ DropArea {
     property bool containsStop: children.length > 1
     property int propertyIndex: index
     property int propertyCount: listModel.count
-    property bool canPlace: index < propertyCount - 1
+    property bool canPlace: index < listModel.count - 1
     property bool clearRequest: false
     property string propertyDir: dir
 
@@ -39,12 +39,10 @@ DropArea {
     }
 
     onExited: {
-//        console.log(propertyIndex, propertyDir, !containsStop, erasable, !containsStop && erasable)
         if(!containsStop && canPlace) {
             console.log("deleting", index)
             added--;
             listModel.remove(index);
-//            playground.clearRequest = !playground.clearRequest;
         }
     }
 
