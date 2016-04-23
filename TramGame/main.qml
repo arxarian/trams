@@ -6,12 +6,9 @@ Window {
 
     id: globalRoot
 
-    /* BUG#1 (fixed) - pokud odeberu kartičku z jiného místa, než jsem právě vložil, vytvoří se volná kartička navíc
-     *       - mělo by to fungovat, složí k tomu propertyIndex a propertyDir
-     * BUG#2 - vytvořené políčko nezmizí, pokud přejedu přes jiné (zmizí, pokud ho přetáhnu v tom směru - a v druhém-, v kterém jsem to přitáhl)
+    /* BUG#2 - vytvořené políčko nezmizí, pokud přejedu přes jiné (zmizí, pokud ho přetáhnu v tom směru - a v druhém-, v kterém jsem to přitáhl)
      * BUG#3 - z-souřadnice kartiček (není úplně bug, spíš vlastnost)
      * BUG#4 - posunutí podložky posune kartu, kterou právě umisťuji
-     * BUG#5 (fixed) - poté, co umístím kartičku do jiného směru, se mi opět vygeneruje pozice navíc (viz BUG#1)
      */
 
 
