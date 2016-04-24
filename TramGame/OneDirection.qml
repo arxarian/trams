@@ -31,50 +31,57 @@ Grid {
             listModel.append({});
         }
         onCheckChanged: {   // NOTE - možná se tahle šílenost nemusí provádět zde
-//            console.log("checking", dir)
-            // TODO - compare all or only the new one?
-//            var theLastInnerChildren = -1;
-            var lastLongitude = 0;
-            var lastLatitude = 0;
-            for(var nIterOutChildren = 0; nIterOutChildren < children.length; nIterOutChildren++) {
+            var preChecked = false;
+            var postChecked = false;
+            var preLongitude = 0;
+            var preLatitude = 0;
+
+            // nejprve projdu dropAreas
+            for(var nIterOutChildren = 0; nIterOutChildren < children.length && !postChecked; nIterOutChildren++) {
                 if(children[nIterOutChildren].objectName === "dropPlace") {
                     var dropStop = children[nIterOutChildren];
 
                     for(var nIterInnerChildren = 0; nIterInnerChildren < dropStop.children.length; nIterInnerChildren++) {
                         if(dropStop.children[nIterInnerChildren].objectName === "tramStop") {
                             var nModelIndex = dropStop.children[nIterInnerChildren].modelIndex;
-//                            console.log("found", dataModel.data[nModelIndex].name)
-                            var goodPlacement = false;
+                            console.log("found", dataModel.data[nModelIndex].name)
 
+                            // tímhle získám zastávku před
                             if(dropStop.propertyIndex === 0) {
-                                // compare with the middle card
-//                                console.log("comparing playground", dir, playground.latitude, playground.longitude, dataModel.data[nModelIndex].name)
+                                preLatitude = playground.latitude;
+                                preLongitude = playground.longitude;
+                                console.log("zero index", preLatitude, preLongitude)
+                            }
+
+                            // zkontroluji pozici
+                            var goodPlacement = false;
+                            if(dropStop.children[nIterInnerChildren].canBeDrag || preChecked) {
+                                // teď bych měl mít poslední vloženou zastávku (TODO - co to udělá, pokud jsem zastávku neumístil?)
+                                console.log("found to check", dataModel.data[nModelIndex].name, dataModel.data[nModelIndex].added, dataModel.data[nModelIndex].latitude, dataModel.data[nModelIndex].longitude)
+
                                 if(dir === "north" || dir === "south") {
-                                    goodPlacement = Scripts.checkCoordinates(root.dir, playground.latitude, dataModel.data[nModelIndex].latitude)
+                                    goodPlacement = Scripts.checkCoordinates(dir, preLatitude, dataModel.data[nModelIndex].latitude)
                                 }
                                 else if(dir === "west" || dir === "east") {
-                                    goodPlacement = Scripts.checkCoordinates(root.dir, playground.longitude, dataModel.data[nModelIndex].longitude)
+                                    goodPlacement = Scripts.checkCoordinates(dir, preLongitude, dataModel.data[nModelIndex].longitude)
                                 }
                                 if(!goodPlacement) {
                                     console.log("first, bad place of", dataModel.data[nModelIndex].name)
+                                    playground.draggedRect.color = Qt.rgba(255, 0, 0, 0.8)
                                 }
-                            }
-                            else {
-                                // compare the rest
-//                                console.log("comparing", dir, lastLatitude, lastLongitude, dataModel.data[nModelIndex].name)
-                                if(dir === "north" || dir === "south") {
-                                    goodPlacement = Scripts.checkCoordinates(root.dir, lastLatitude, dataModel.data[nModelIndex].latitude)
-                                }
-                                else if(dir === "west" || dir === "east") {
-                                    goodPlacement = Scripts.checkCoordinates(root.dir, lastLongitude, dataModel.data[nModelIndex].longitude)
+                                if(preChecked) {
+                                    postChecked = true;
                                 }
 
-                                if(!goodPlacement) {
-                                    console.log("second, bad place of", dataModel.data[nModelIndex].name)
-                                }
+                                preChecked = true;
+                                console.log("prechecked done");
+                                preLatitude = dataModel.data[nModelIndex].latitude;
+                                preLongitude = dataModel.data[nModelIndex].longitude;
+
                             }
-                            lastLatitude = dataModel.data[nModelIndex].latitude;
-                            lastLongitude = dataModel.data[nModelIndex].longitude;
+                            preLatitude = dataModel.data[nModelIndex].latitude;
+                            preLongitude = dataModel.data[nModelIndex].longitude;
+                            console.log("other index", preLatitude, preLongitude)
                         }
                     }
 

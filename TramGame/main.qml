@@ -9,9 +9,6 @@ Window {
     /* BUG#2 - vytvořené políčko nezmizí, pokud přejedu přes jiné (zmizí, pokud ho přetáhnu v tom směru - a v druhém-, v kterém jsem to přitáhl)
      * BUG#3 - z-souřadnice kartiček (není úplně bug, spíš vlastnost)
      * BUG#4 - posunutí podložky posune kartu, kterou právě umisťuji
-     * BUG#6 - opět nefunguje vložení na první pozici (co takhle ty unit testy?)
-
-     * TODO#1 - předělat kontrolu na posledně vloženou
      */
 
 

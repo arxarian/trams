@@ -16,6 +16,7 @@ Rectangle {
         target: playground
         onMakeStopsNonDraggableChanged: {
             canBeDrag = false;
+            color = Qt.rgba(255, 0, 0, 0);
         }
     }
 
@@ -46,6 +47,7 @@ Rectangle {
                 script: {
                     playground.draggedRect = root;
                     if(draggedItem.Drag.target !== null) {
+                        root.color = Qt.rgba(255, 0, 0, 0);
                         root.sourceIndex = draggedItem.Drag.target.propertyIndex;
                         // umístění obdelníku nad obdelník draggedItem tak, aby se neskrýval pod komponenty OneDirection (řeší z-index)
                         var positionOffset = root.mapToItem(playground);

@@ -10,7 +10,6 @@ var topDir = []
 var bottomDir = []
 
 function checkCoordinates(dir, firstCoordinate, secondCoordinate) {
-//    console.log(firstCoordinate, secondCoordinate)
     if(dir === "north") {
         return firstCoordinate <= secondCoordinate;
     }
