@@ -22,6 +22,8 @@ Item {
     property real longitude: 0                          // zeměpisná délka (E) výchozí zastávky
     property real latitude: 0                           // zeměpisná šířka (N) výchozí zastávky
 
+    property int globalZ: 0
+
     id: playground
     anchors.fill: parent
 
@@ -36,6 +38,7 @@ Item {
             // mark all stops as non dragable
             makeStopsNonDraggable = !makeStopsNonDraggable;
             var stop = createNewStop();
+            stop.z = globalZ + 2;
         }
     }
 

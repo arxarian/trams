@@ -7,7 +7,6 @@ Window {
     id: globalRoot
 
     /* BUG#2 - vytvořené políčko nezmizí, pokud přejedu přes jiné (zmizí, pokud ho přetáhnu v tom směru - a v druhém-, v kterém jsem to přitáhl)
-     * BUG#3 - z-souřadnice kartiček (není úplně bug, spíš vlastnost)
      * BUG#4 - posunutí podložky posune kartu, kterou právě umisťuji
      */
 
