@@ -49,6 +49,7 @@ Rectangle {
                     if(draggedItem.Drag.target !== null) {
                         root.color = Qt.rgba(255, 0, 0, 0);
                         root.sourceIndex = draggedItem.Drag.target.propertyIndex;
+                        draggedItem.Drag.target.z = playground.globalZ + 1;
                         // umístění obdelníku nad obdelník draggedItem tak, aby se neskrýval pod komponenty OneDirection (řeší z-index)
                         var positionOffset = root.mapToItem(playground);
 //                        globalTramStop.x = Qt.binding(function() {return positionOffset.x + draggedItem.x})

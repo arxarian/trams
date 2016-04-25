@@ -17,6 +17,10 @@ DropArea {
         onClearRequestChanged: added = 0;
     }
 
+    onZChanged: {
+        root.z = z; // TODO - rename from root
+    }
+
     onEntered: {
         console.log("entered", index)
         if(children[1] !== playground.draggedRect && added < 1) {
