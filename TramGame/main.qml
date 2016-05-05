@@ -8,6 +8,7 @@ Window {
 
     /* BUG#2 - vytvořené políčko nezmizí, pokud přejedu přes jiné (zmizí, pokud ho přetáhnu v tom směru - a v druhém-, v kterém jsem to přitáhl)
      * BUG#4 - posunutí podložky posune kartu, kterou právě umisťuji
+     * BUG#7 - pokud novou kartičku pustím nad jinou kartičkou, vrátí mimo plochu, ale do toho samého směru nejde opět položit (protože playground.draggedRect.sourceDir si pamatuje poslední směr)
      */
 
 
