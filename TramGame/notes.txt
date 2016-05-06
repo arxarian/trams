@@ -18,4 +18,8 @@ TODO: kontrolovat kartu ihned
  případech funguje lépe než grid verze (zejména v případech bugů výše). Nicméně je zde velký bug - padá.
  -pokud se vyřeší bug s padáním a dokážu-li ten kód zjednodušit, je vyhráno
  -pod zjednodušením si představu převzetí některých věcí z grid verze, nicméně ne natolik, aby to začalo
-  shodně buggovat.
+  shodně buggovat
+ -oba dva předchozí body spolu souvisí - zjednoduším-li to, může se vytratit bug s padáním
+
+ -jak to provést
+  -např.
