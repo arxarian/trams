@@ -11,3 +11,11 @@
 TODO: drag.axis: Drag.YAxis pro přesouvání kartičky pouze v jednom směru
 TODO: všechny směry budou mít jako nultou kartu střed a jako poslední něco hodně velkého
 TODO: kontrolovat kartu ihned
+
+16/6/5 - jaký je rozdíl mezi Grid verzí a ListViews verzí?
+-grid verze má bugy, které by nemuselo být snadné odstranit a celkově bych musel sám ošetřit víc případů
+-listviews verze je na první pohled složitejší (vše jsem zkoušel vyřešit velkou třídou), ale v některých
+ případech funguje lépe než grid verze (zejména v případech bugů výše). Nicméně je zde velký bug - padá.
+ -pokud se vyřeší bug s padáním a dokážu-li ten kód zjednodušit, je vyhráno
+ -pod zjednodušením si představu převzetí některých věcí z grid verze, nicméně ne natolik, aby to začalo
+  shodně buggovat.
