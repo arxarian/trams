@@ -23,3 +23,5 @@ TODO: kontrolovat kartu ihned
 
  -jak to provést
   -např.
+
+ OneDirection obsahuje listview dropArea. Těch by pokaždé mohlo být o jedna více, než je položených zastávek
