@@ -1,23 +1,10 @@
 import QtQuick 2.0
 
 DropArea {
-    signal dropState(bool active)
-
-    property int allowedIndex: 1
+    property int propertyIndex: index
+    property var model: undefined
 
     id: dropTarget
-
-    onContainsDragChanged: {
-        if(containsDrag) playground.karma++;
-        else playground.karma--;
-        if(index < allowedIndex) {
-            playground.canDrop = true;
-            dropState(containsDrag);
-        }
-        else {
-            playground.canDrop = false;
-        }
-    }
 
     Rectangle {
         id: rect
@@ -26,7 +13,7 @@ DropArea {
 
         states: [
             State {
-                when: dropTarget.containsDrag && index < allowedIndex
+                when: dropTarget.containsDrag
                 PropertyChanges {
                     target: rect
                     color: "grey"
