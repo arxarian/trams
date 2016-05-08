@@ -3,30 +3,33 @@ import "qrc:/scripts.js" as Scripts
 
 Rectangle {
 
-    property bool movable: playground.lastIndex === index && playground.lastDir === dir
+    property bool movable: true//playground.lastIndex === index && playground.lastDir === dir
     property string dir: "none"
-    property int allowedIndex: 1
-    property alias pressed: mouseArea.pressed
+//    property int allowedIndex: 1
+//    property alias pressed: mouseArea.pressed
+    property int modelIndex: -1
 
     id: root
     height: cellHeight
     width: cellWidth
-    color: playground.lastDir === dir && playground.lastIndex === index && !playground.goodPlace ? "darkred" : "transparent"
+    color: "red"//playground.lastDir === dir && playground.lastIndex === index && !playground.goodPlace ? "darkred" : "transparent"
     border.width: 1
-    border.color: hidden ? "#700000ff" : "#70ff0000"
+    border.color: /*hidden ? "#700000ff" :*/ "#70ff0000"
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         drag.target: movable ? delegate : undefined
 
-        enabled: !hidden
-        visible: !hidden
+//        enabled: !hidden
+//        visible: !hidden
 
         onReleased: {
-            if(playground.canDrop) {
-                parent = delegate.Drag.target !== null ? delegate.Drag.target : root
-            }
+//            console.log(delegate.Drag.target, delegate.Drag.target.containsStop)
+//            if(playground.canDrop) {
+            root.parent = delegate.Drag.target !== null ? delegate.Drag.target : root
+            playground.clearRequest = !playground.clearRequest;
+//            }
         }
 
         onClicked: console.log(/*"movable", movable, "lastIndex", lastIndex, "index", index, "lastDir", lastDir, "dir", dir*/ "show info!")
@@ -52,7 +55,7 @@ Rectangle {
                 width: parent.width * 0.95
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: name
+                text: modelIndex === -1 ? "" : dataModel.data[modelIndex].name
                 wrapMode: Text.WordWrap
             }
 
