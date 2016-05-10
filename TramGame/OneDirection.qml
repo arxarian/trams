@@ -8,14 +8,21 @@ Item {
     property int cells: (playground.columns - 1) / 2
     property string dir: "left"
 
-    property int activeIndex: -1
+    property int activeIndex: -1        // index aktivní pozice pro položení (TraSpot, DropArea)
 
     id: root
 
     Connections {
         target: playground
         onClearRequestChanged: {
-            // 1st - promzat prázdné (bez zastávky) - měl bych poznat z cardModel (poznám?)
+            // 1st - promzat prázdné (bez zastávky)
+            for(var nIndex = 0; nIndex < cardModel.count; ++nIndex) {
+                if(!cardModel.get(nIndex).containsStop) {
+                    cardModel.remove(nIndex);
+                    --nIndex;
+                }
+            }
+            // 2nd - pokud jsou na všech pozicích zastávky, přidám novou pozici na konec
             if(dropAreaModel.count === cardModel.count) {
                 dropAreaModel.append({});
             }
@@ -45,17 +52,13 @@ Item {
             model: cardModel
 
             onContainsDragChanged: {
-//                console.log(root.dir, index, containsDrag)
                 if(containsDrag) {
                     activeIndex = index;
-//                    if((lastDir !== root.dir || playground.karma == 1)/* && !cellMoving*/) {
-                    console.log("adding", index <= cardModel.count)
+                    if(index !== playground.lastIndex || dir !== playground.lastDir) {
                         if(index <= cardModel.count) {
-                            cardModel.insert(index, {containsStop: false});
-//                            cardModel.insert(index, {});
-
-
+                            cardModel.insert(index, {"containsStop": false});
                         }
+                    }
 //                        lastDir = root.dir;
 //                    }
 //                    else if(lastDir === root.dir) {
@@ -66,8 +69,7 @@ Item {
                 }
                 else {
 //                    if(root.dir !== root.dir || (playground.karma == 0 && firstPlacementActive)) {
-//                        console.log("should remove", index, "lastDir", lastDir, "can remove", Scripts.canRemove(root.deck),"dir", playground.dir,"removed")
-                    console.log("removing", !cardModel.get(index).containsStop)
+//                    if(/*!cardModel.get(index).containsStop ||  */(index !== playground.lastIndex && dir !== playground.lastDir)) {
                     if(!cardModel.get(index).containsStop) {
                         cardModel.remove(index);
                     }
@@ -91,9 +93,31 @@ Item {
         interactive: false
         model: cardModel
         delegate: Item {
+            // signalizuje novou zatávku na událost onReleased
+            signal newStop();
+            // směr, ve kterém delegát leží
+            property string stopDir: root.dir
+            // index delegáta
+            property int stopIndex: index
+            // noStop - pokud delegát potomka, zatávka byla přesunuta, a proto je označena pro smazání (containsStop = false)
+            property bool noStop: children.length < 2   // NOTE - později změnit na 1 (dva kvůlu zelenému trojúhelníku)
+
+            onNoStopChanged: {
+                if(noStop) {
+                    console.log("no stop", index)
+                    cardModel.setProperty(index, "containsStop", false);
+                }
+            }
+
             objectName: "dropParent" + index
             width: cellWidth
             height: cellHeight
+
+            onNewStop: {
+                cardModel.setProperty(index, "containsStop", true);
+                console.log("new stop", cardModel.get(index).containsStop);
+            }
+
 
             Rectangle {
                 anchors.fill: parent
@@ -101,15 +125,13 @@ Item {
             }
         }
         onCountChanged: {
+            // smyčka zjistí, na kterou pozicí se zastávka právě vznáší - a onen objekt uloží do dragTarget
             var child = cardView.children[0];
             for(var i = 0; i < child.children.length; i++) {
                 var oName = child.children[i].objectName;
                 var strIndex = oName.replace("dropParent", "");
-//                console.log("new index", strIndex, activeIndex, strIndex.length > 0 && activeIndex === Number(strIndex));
                 if(activeIndex !== -1 && strIndex.length > 0 && activeIndex === Number(strIndex)) {
-                    playground.dragTarget = child.children[i];
-//                    console.log("playround", playground.dragTarget)
-                    cardModel.setProperty(activeIndex, "containsStop", true);
+                    playground.dragTarget = child.children[i]; // využívá se k reparentování zastávky a k nastavení obaszenosti pozice v okamžiku puštění
                 }
             }
         }

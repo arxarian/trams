@@ -16,9 +16,10 @@ Item {
     property bool clearRequest: false
 
     property var dragTarget: null
+    property var dragSource: null
 
-//    property string lastDir: "none"
-//    property int lastIndex: -1
+    property string lastDir: "none"
+    property int lastIndex: -1
 
     id: playground
     anchors.fill: parent

@@ -21,8 +21,13 @@ Rectangle {
 
         onReleased: {
             console.log("propertyIndex", delegate.Drag.target, playground.dragTarget)
-            // zde parentovat na to, co se objeví v playgroud jako parrent
+            // zde parentovat na to, co se objeví v playgroud jako parent
             root.parent = delegate.Drag.target !== null ? playground.dragTarget : root
+            if(delegate.Drag.target !== null) {
+                playground.dragTarget.newStop();
+                playground.lastDir = playground.dragTarget.stopDir;
+                playground.lastIndex = playground.dragTarget.stopIndex;
+            }
             playground.clearRequest = !playground.clearRequest
         }
 
@@ -60,6 +65,13 @@ Rectangle {
 
             states: State {
                 when: mouseArea.drag.active
+                StateChangeScript {script: {
+                        if(playground.dragSource !== delegate) {
+                            playground.dragSource = delegate
+                            playground.lastDir = "none"
+                        }
+                    }
+                }
                 ParentChange { target: delegate; parent: playground }
                 AnchorChanges { target: delegate; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
             }
