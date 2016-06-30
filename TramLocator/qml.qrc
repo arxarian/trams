@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>zastavky.txt</file>
+        <file>Stop.qml</file>
+    </qresource>
+</RCC>
