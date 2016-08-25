@@ -49,6 +49,21 @@ Window {
                     stop1.x = playground.width / 2 - stop1.width / 2
                     stop2.x = playground.width / 2 - stop2.width / 2;
                 }
+                // compute distances
+                var dLat_r = (stop1.latitude - stop2.latitude) * Math.PI / 180;
+                var dLon_r = (stop1.longitude - stop2.longitude) * Math.PI / 180;
+                var lat1_r = stop1.latitude * Math.PI / 180;
+                var lat2_r = stop2.latitude * Math.PI / 180;
+
+                var aLat = Math.sin(dLat_r/2) * Math.sin(dLat_r/2);
+                var aLon = Math.cos(lat1_r) * Math.cos(lat2_r) * Math.sin(dLon_r/2) * Math.sin(dLon_r/2);
+
+                var cLat = 2 * Math.atan2(Math.sqrt(aLat), Math.sqrt(1 - aLat));
+                var cLon = 2 * Math.atan2(Math.sqrt(aLon), Math.sqrt(1 - aLon));
+
+                var R = 6373000; // Earth's radius in metres
+                textHorizontalDistance.distance = (R * cLon).toFixed();
+                textVerticalDistance.distance = (R * cLat).toFixed();
             }
         }
 
@@ -115,9 +130,35 @@ Window {
             }
 
             Behavior on x {NumberAnimation {duration: 200}}
+
+            Text {
+                property double distance: -1
+
+                id: textVerticalDistance
+                opacity: distance < 0 ? 0 : 1
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: textHorizontalDistance.top
+                font.pixelSize: 16
+                text: "↕ " + distance + " m"
+
+                Behavior on opacity {NumberAnimation{duration: 400}}
+            }
+            Text {
+                property double distance: -1
+
+                id: textHorizontalDistance
+                opacity: distance < 0 ? 0 : 1
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height * 0.01
+                font.pixelSize: 16
+                text: "↔ " + distance + " m"
+
+                Behavior on opacity {NumberAnimation{duration: 400}}
+            }
         }
 
-        Item {
+        Item {  // Stops-List Wrapper
             id: listWrapper
             width: parent.width * 0.6
             height: parent.height
@@ -159,7 +200,7 @@ Window {
                 }
             }
 
-            Rectangle {
+            Rectangle { // Stops-List background
                 z: -1
                 anchors.fill: parent
                 color: qmlRoot.redColor
