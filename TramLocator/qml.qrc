@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>zastavky.txt</file>
         <file>Stop.qml</file>
+        <file>StopsView.qml</file>
     </qresource>
 </RCC>

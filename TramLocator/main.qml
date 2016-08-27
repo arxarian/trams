@@ -158,53 +158,11 @@ Window {
             }
         }
 
-        Item {  // Stops-List Wrapper
+        StopsView {
             id: listWrapper
             width: parent.width * 0.6
             height: parent.height
             anchors.left: desktop.right
-
-            ListView {
-                id: list
-                anchors.fill: parent
-                model: dataModel
-                maximumFlickVelocity: 7500
-                delegate: MouseArea {
-                    width: listWrapper.width
-                    height: listWrapper.height / 17
-
-                    onClicked: {
-                        clickAnimation.start();
-                        qmlRoot.selectedStop = dataModel.get(index)
-                    }
-
-                    SequentialAnimation {
-                        id: clickAnimation
-                        ColorAnimation {target: rect; property: "color"; from: "#2e472e"; to: rect.color}
-                    }
-
-                    Rectangle {
-                        id: rect
-                        anchors.fill: parent
-                        color: "transparent"
-                    }
-
-                    Text {
-                        anchors.fill: parent
-                        anchors.leftMargin: parent.width * 0.05
-                        verticalAlignment: Text.AlignVCenter
-                        color: qmlRoot.lightColor
-                        font.pixelSize: 18
-                        text: name
-                    }
-                }
-            }
-
-            Rectangle { // Stops-List background
-                z: -1
-                anchors.fill: parent
-                color: qmlRoot.redColor
-            }
         }
     }
 }
