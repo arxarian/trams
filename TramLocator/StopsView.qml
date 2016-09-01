@@ -15,7 +15,7 @@ Rectangle {  // Stops-List Wrapper
 
             onClicked: {
                 clickAnimation.start();
-                qmlRoot.selectedStop = dataModel.get(index)
+                playgroundRoot.selectedStop = dataModel.get(index)
             }
 
             SequentialAnimation {

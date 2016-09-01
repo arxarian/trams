@@ -45,13 +45,13 @@ Rectangle {
     }
 
     Connections {
-        target: qmlRoot
+        target: playgroundRoot
         onStateChanged: {
-            if(qmlRoot.state === "" && root.state === "active") {
-                if(qmlRoot.selectedStop !== null) {
-                    root.name = qmlRoot.selectedStop.name
-                    root.latitude = qmlRoot.selectedStop.latitude
-                    root.longitude = qmlRoot.selectedStop.longitude
+            if(playgroundRoot.state === "" && root.state === "active") {
+                if(playgroundRoot.selectedStop !== null) {
+                    root.name = playgroundRoot.selectedStop.name
+                    root.latitude = playgroundRoot.selectedStop.latitude
+                    root.longitude = playgroundRoot.selectedStop.longitude
                     root.set = true
                     root.stopSet()
                 }
@@ -78,10 +78,10 @@ Rectangle {
             /*
                 - na kliknutí zavolám menu
                 - zároveň chci vědět, která z těchto dvou komponent událost vyvolala
-                - po skrytí menu chci vzít qmlRoot.selectedStop a dosadit ji do kompomenty, která vyvolala událost
+                - po skrytí menu chci vzít playgroundRoot.selectedStop a dosadit ji do kompomenty, která vyvolala událost
             */
             root.state = "active"
-            qmlRoot.state = "list"
+            playgroundRoot.state = "list"
         }
     }
 }

@@ -4,5 +4,9 @@
         <file>zastavky.txt</file>
         <file>Stop.qml</file>
         <file>StopsView.qml</file>
+        <file>TramMainMenuButton.qml</file>
+        <file>PlaygroundScreen.qml</file>
+        <file>MenuScreen.qml</file>
+        <file>AboutScreen.qml</file>
     </qresource>
 </RCC>
