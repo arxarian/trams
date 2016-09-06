@@ -70,8 +70,8 @@ Item {
         State {
             name: "list"
             PropertyChanges {
-                target: desktop
-                x: -listWrapper.width
+                target: listWrapper
+                x: desktop.width - listWrapper.width
             }
         }
     ]
@@ -127,8 +127,6 @@ Item {
             }
         }
 
-        Behavior on x {NumberAnimation {duration: 200}}
-
         Text {
             property double distance: -1
 
@@ -158,9 +156,12 @@ Item {
 
     StopsView {
         id: listWrapper
-        width: parent.width * 0.6
+        width: parent.width * 0.5
         height: parent.height
-        anchors.left: desktop.right
+        visible: x !== desktop.width
+        x: desktop.width
+
+        Behavior on x {NumberAnimation {duration: 200}}
     }
 }
 
