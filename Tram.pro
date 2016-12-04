@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += TramGame TramUnitTests
+SUBDIRS += TramGame TramUnitTests TramStopsParser
