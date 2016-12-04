@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
 
 //    QFile inputFile(QDir::currentPath() + "/zastavky.txt");
-    QFile inputFile(":/zastavky.txt");
+    QFile inputFile(":/tramStops.csv");
     if(inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream inStream(&inputFile);

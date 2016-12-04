@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>zastavky.txt</file>
+        <file>tramStops.csv</file>
         <file>Stop.qml</file>
         <file>StopsView.qml</file>
         <file>TramMainMenuButton.qml</file>
