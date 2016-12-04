@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("dataModel", &dataModel);
     ctxt->setContextProperty("compileTime", QVariant(__DATE__));
-    ctxt->setContextProperty("appVErsion", QString(APP_VERSION));
+    ctxt->setContextProperty("appVersion", QString(APP_VERSION));
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
