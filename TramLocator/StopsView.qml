@@ -5,13 +5,13 @@ Item {   // Stops-List Wrapper
 
     Rectangle {
         id: line
-        width: 1
+//        width: 1
         height: parent.height
         color: "black"
     }
 
     Rectangle {
-        color: Qt.rgba(qmlRoot.redColor.r, qmlRoot.redColor.g, qmlRoot.redColor.b, 0.92)
+        color: Qt.rgba(qmlRoot.redColor.r, qmlRoot.redColor.g, qmlRoot.redColor.b, 0.91)
         anchors.left: line.right
         width: parent.width
         height: parent.height

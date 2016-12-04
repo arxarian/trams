@@ -6,4 +6,16 @@ Item {
     // tramstops count
     // created by
     // license
+
+    Text {
+        anchors.centerIn: parent
+        horizontalAlignment: Text.AlignHCenter
+        text: "TramLocator " + appVersion +
+              "\n" +
+              "\nTramstops count: " + dataModel.count +
+              "\n" +
+              "\nLast update: " + compileTime +
+              "\nCreated by arxarian@gmail.com"
+        font.pixelSize: 16
+    }
 }
