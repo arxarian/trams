@@ -8,5 +8,6 @@ int main(int argc, char *argv[])
     ProcessFile oProcessFile;
     oProcessFile.SetFile("../../Tram/TramStopsParser/DOP_PID_ZAST_POPIS_TS_B.gml");
     oProcessFile.ParseFile();
+    oProcessFile.SortAlphabetically();
     oProcessFile.ExportFile();
 }

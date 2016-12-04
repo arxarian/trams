@@ -24,6 +24,11 @@ struct TramStop
     {
         return this->strName == (other.strName);
     }
+
+    bool operator<(const TramStop& other) const
+    {
+        return this->strName < other.strName;
+    }
 };
 
 enum class StopTypes

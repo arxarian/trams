@@ -20,6 +20,7 @@ public:
     ProcessFile() {}
     void SetFile(const QString& strFileName);
     void ParseFile();
+    void SortAlphabetically();
     void ExportFile();
 };
 

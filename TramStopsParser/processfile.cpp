@@ -85,6 +85,11 @@ void ProcessFile::ParseFile()
     qDebug() << "parsed" << m_arrTramStops.size() << "tram stops";
 }
 
+void ProcessFile::SortAlphabetically()
+{
+    std::sort(m_arrTramStops.begin(), m_arrTramStops.end()/*, TramStop::TramStopLessThan*/);
+}
+
 void ProcessFile::ExportFile()
 {
     QString strOutputFileName("tramStops.csv");
