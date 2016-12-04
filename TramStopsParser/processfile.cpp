@@ -87,7 +87,7 @@ void ProcessFile::ParseFile()
 
 void ProcessFile::ExportFile()
 {
-    QString strOutputFileName("tramStops.txt");
+    QString strOutputFileName("tramStops.csv");
     QFile oFile(strOutputFileName);
 
     if(!oFile.open(QFile::WriteOnly))
@@ -96,13 +96,12 @@ void ProcessFile::ExportFile()
         return;
     }
 
-    QTextStream outStream;
-    outStream.setDevice(&oFile);
+    QTextStream outStream(&oFile);
+    outStream.setCodec("UTF-8");
     outStream.setRealNumberPrecision(10);
 
     for(auto& oTramStop : m_arrTramStops)
     {
-//        qDebug() << oTramStop.arrGpsPoints.first().qLatitude << "," << oTramStop.arrGpsPoints.first().qLongitude;
         outStream << oTramStop.strName << "," << oTramStop.arrGpsPoints.first().qLatitude << "," << oTramStop.arrGpsPoints.first().qLongitude << "," << endl;
     }
     qDebug() << "data stored to" << strOutputFileName;
