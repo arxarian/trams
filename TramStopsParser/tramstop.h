@@ -27,7 +27,7 @@ struct TramStop
 
     bool operator<(const TramStop& other) const
     {
-        return this->strName < other.strName;
+        return this->strName.normalized(QString::NormalizationForm_D) < other.strName.normalized(QString::NormalizationForm_D);
     }
 };
 
