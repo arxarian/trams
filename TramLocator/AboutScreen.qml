@@ -7,6 +7,11 @@ Item {
     // created by
     // license
 
+    Rectangle {
+        anchors.fill: parent
+        color: qmlRoot.lightColor
+    }
+
     Text {
         anchors.centerIn: parent
         horizontalAlignment: Text.AlignHCenter

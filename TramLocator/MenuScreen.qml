@@ -6,6 +6,11 @@ Item {
     width: parent.width
     height: parent.height
 
+    Rectangle {
+        anchors.fill: parent
+        color: qmlRoot.lightColor
+    }
+
     Column {
         id: column
         height: parent.height / 4
