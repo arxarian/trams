@@ -3,11 +3,13 @@
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
 #include <QDir>
+#include <QtQml>
 
 #include <QDebug>
 
 #include "datamodel.h"
 #include "modelwrapper.h"
+#include "proxymodel.h"
 
 class TramStop
 {
@@ -61,6 +63,7 @@ int main(int argc, char *argv[])
 
     qDebug() << dataModel.count();
 
+    qmlRegisterType<ProxyModel>("ProxyModel", 1, 0, "ProxyModel");
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("dataModel", &dataModel);
     ctxt->setContextProperty("compileTime", QVariant(__DATE__));

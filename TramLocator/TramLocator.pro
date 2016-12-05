@@ -7,7 +7,7 @@ SOURCES += main.cpp
 
 RESOURCES += qml.qrc
 
-DEFINES += APP_VERSION=\\\"0.0.0\\\"
+DEFINES += APP_VERSION=\\\"1.1.0\\\"
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -17,7 +17,11 @@ include(deployment.pri)
 
 HEADERS += \
     datamodel.h \
-    modelwrapper.h
+    modelwrapper.h \
+    proxymodel.h
+
+SOURCES += \
+    proxymodel.cpp
 
 DISTFILES += \
     android/AndroidManifest.xml \
