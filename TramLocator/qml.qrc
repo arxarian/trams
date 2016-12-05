@@ -9,5 +9,6 @@
         <file>MenuScreen.qml</file>
         <file>AboutScreen.qml</file>
         <file>search-icon.png</file>
+        <file>DistancesBar.qml</file>
     </qresource>
 </RCC>

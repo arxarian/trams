@@ -29,6 +29,11 @@ Item {   // Stops-List Wrapper
 
             onDisplayTextChanged: proxyModel.filterString = "^" + displayText;
 
+            Connections {
+                target: playgroundRoot
+                onSelectedStopChanged: filterText.text = "";
+            }
+
             Image {
                 anchors.rightMargin: parent.height * 0.4
                 anchors.right: parent.right
@@ -67,8 +72,6 @@ Item {   // Stops-List Wrapper
                     height: root.height / (root.stopsViewCount - 1)
 
                     onClicked: {
-                        filterText.text = "";
-                        Qt.inputMethod.hide();
                         clickAnimation.start();
                         playgroundRoot.selectedStop = dataModel.get(index)
                     }

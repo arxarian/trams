@@ -19,8 +19,8 @@ Item {
         var cLon = 2 * Math.atan2(Math.sqrt(aLon), Math.sqrt(1 - aLon));
 
         var R = 6373000; // Earth's radius in metres
-        textHorizontalDistance.distance = (R * cLon).toFixed();
-        textVerticalDistance.distance = (R * cLat).toFixed();
+        distancesBar.horizontalDistance = (R * cLon).toFixed();
+        distancesBar.verticalDistance = (R * cLat).toFixed();
     }
 
     function compareStops() {
@@ -76,7 +76,10 @@ Item {
         }
     ]
 
-    onSelectedStopChanged: state = ""
+    onSelectedStopChanged: {
+        state = "";
+        Qt.inputMethod.hide();
+    }
 
     Connections {
         target: stop1
@@ -127,30 +130,14 @@ Item {
             }
         }
 
-        Text {
-            property double distance: -1
+        DistancesBar {
+            id: distancesBar
 
-            id: textVerticalDistance
-            opacity: distance < 0 ? 0 : 1
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: textHorizontalDistance.top
-            font.pixelSize: 16
-            text: "↕ " + distance + " m"
-
-            Behavior on opacity {NumberAnimation{duration: 400}}
-        }
-        Text {
-            property double distance: -1
-
-            id: textHorizontalDistance
-            opacity: distance < 0 ? 0 : 1
+            height: parent.height * 0.05
+            width: parent.width * 0.2
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: parent.height * 0.01
-            font.pixelSize: 16
-            text: "↔ " + distance + " m"
-
-            Behavior on opacity {NumberAnimation{duration: 400}}
         }
     }
 
