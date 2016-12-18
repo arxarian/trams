@@ -15,6 +15,11 @@ int ProxyModel::count() const
     return rowCount();
 }
 
+qint32 ProxyModel::mapToSource(qint32 nIndex) const
+{
+    return QSortFilterProxyModel::mapToSource(index(nIndex, 0)).row();
+}
+
 QObject *ProxyModel::source() const
 {
     return sourceModel();

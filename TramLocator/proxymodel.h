@@ -34,6 +34,8 @@ public:
 
     int count() const;
 
+    Q_INVOKABLE qint32 mapToSource(qint32 nIndex) const;
+
 signals:
     void countChanged();
 };
