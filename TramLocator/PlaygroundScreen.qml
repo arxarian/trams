@@ -78,7 +78,6 @@ Item {
 
     onSelectedStopChanged: {
         state = "";
-        Qt.inputMethod.hide();
     }
 
     Connections {

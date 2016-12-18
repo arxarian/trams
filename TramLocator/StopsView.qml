@@ -31,7 +31,10 @@ Item {   // Stops-List Wrapper
 
             Connections {
                 target: playgroundRoot
-                onSelectedStopChanged: filterText.text = "";
+                onStateChanged: {
+                    filterText.text = "";
+                    filterText.focus = false;
+                }
             }
 
             Image {
@@ -73,7 +76,7 @@ Item {   // Stops-List Wrapper
 
                     onClicked: {
                         clickAnimation.start();
-                        playgroundRoot.selectedStop = dataModel.get(index)
+                        playgroundRoot.selectedStop = dataModel.get(list.model.mapToSource(index))
                     }
 
                     SequentialAnimation {

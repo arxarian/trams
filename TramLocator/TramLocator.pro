@@ -7,6 +7,8 @@ SOURCES += main.cpp
 
 RESOURCES += qml.qrc
 
+#VERSION=1.1.0
+
 DEFINES += APP_VERSION=\\\"1.1.0\\\"
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

@@ -26,6 +26,13 @@ public:
     TramStop() {}
 };
 
+// TODO list
+// a - place loop search icon to the left (or use android search box style, if possile)
+// b - try differnt resolution (e. g. virtual device or desktop app)
+// c - online update of data
+// d - online update of app
+// z - do others todos
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -66,8 +73,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<ProxyModel>("ProxyModel", 1, 0, "ProxyModel");
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("dataModel", &dataModel);
-    ctxt->setContextProperty("compileTime", QVariant(__DATE__));
-    ctxt->setContextProperty("appVersion", QString(APP_VERSION));
+    ctxt->setContextProperty("compileTime", QVariant(__DATE__));        // TODO - replace by real time of last update (N2H - display time of last online update check)
+    ctxt->setContextProperty("appVersion", QString(APP_VERSION));       // TODO - different from android manifest version, why? (http://doc.qt.io/qt-5/deployment-android.html?)
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
