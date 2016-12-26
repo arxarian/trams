@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.5
 
 Rectangle {
     id: root
@@ -8,7 +8,6 @@ Rectangle {
     property color textColor: "black"
     property color buttonColor: "gray"
 
-//    border.width: 1
     color: mouseArea.containsMouse ? buttonColor : "transparent"
 
     Behavior on color {ColorAnimation {duration: 100}}
@@ -22,6 +21,7 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+        preventStealing: true
         onClicked: root.clicked()
     }
 }

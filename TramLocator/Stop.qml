@@ -73,7 +73,7 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-
+        preventStealing: true
         onClicked: {
             /*
                 - na kliknutí zavolám menu
