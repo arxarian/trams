@@ -19,41 +19,35 @@ Item {   // Stops-List Wrapper
         height: parent.height
         width: parent.width
 
-        TextField {
-            id: filterText
+        Item
+        {
+            id: filterRow
+            z: 1
             width: parent.width
             height: parent.height * 0.1;
 
-            font.pixelSize: 18
-            placeholderText: "search tram stop..."
+            TextField {
+                id: filterText
+                anchors.fill: parent
 
-            onDisplayTextChanged: proxyModel.filterString = "^" + displayText;
+                font.pixelSize: 18
+                placeholderText: "search tram stop..."
 
-            Connections {
-                target: playgroundRoot
-                onStateChanged: {
-                    filterText.text = "";
-                    filterText.focus = false;
+                onDisplayTextChanged: proxyModel.filterString = "^" + displayText;
+
+                Connections {
+                    target: playgroundRoot
+                    onStateChanged: {
+                        filterText.text = "";
+                        filterText.focus = false;
+                    }
                 }
-            }
-
-            Image {
-                anchors.rightMargin: parent.height * 0.4
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                height: filterText.height * 0.35
-                width: filterText.height * 0.35
-
-                smooth: true
-                mipmap: true
-                fillMode: Image.PreserveAspectFit
-                source: "qrc:/search-icon.png"
             }
         }
 
         Rectangle {
             color: Qt.rgba(qmlRoot.redColor.r, qmlRoot.redColor.g, qmlRoot.redColor.b, 0.91)
-            anchors.top: filterText.bottom
+            anchors.top: filterRow.bottom
             anchors.bottom: parent.bottom
             width: parent.width
 
