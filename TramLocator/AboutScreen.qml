@@ -19,7 +19,7 @@ Item {
               "\n" +
               "\nTramstops count: " + dataModel.count +
               "\n" +
-              "\nLast update: " + compileTime +
+              "\nLast data update: " + compileTime +
               "\nCreated by arxarian@gmail.com"
         font.pixelSize: 16
     }

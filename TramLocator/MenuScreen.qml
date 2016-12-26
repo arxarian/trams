@@ -26,6 +26,7 @@ Item {
             buttonColor: qmlRoot.redColor
             onClicked: screensView.currentIndex = 2;
         }
+
         TramMainMenuButton {
             width: parent.width - column.spacing
             height: parent.height / 3
@@ -34,6 +35,7 @@ Item {
             buttonColor: qmlRoot.redColor
             onClicked: screensView.currentIndex = 0;
         }
+
         TramMainMenuButton {
             width: parent.width - column.spacing
             height: parent.height / 3
